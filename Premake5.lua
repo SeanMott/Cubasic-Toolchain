@@ -171,14 +171,6 @@ files
     "PixelCube/includes/**.hpp",
     "PixelCube/src/**.cpp",
 
-    --volk
-    --"Venders/Volk/volk.c",
-    --"Venders/Volk/volk.h",
-
-    ---vulkan bootstrapper
-    --"Venders/VKBootstrap/src/**.cpp",
-    --"Venders/VKBootstrap/src/**.h"
-
     ---imgui
 }
 
@@ -186,15 +178,9 @@ includedirs
 {
     "PixelCube/includes",
 
-    --"Venders/SDL/include",
     "Venders/FMT/include",
     "Venders/GLM",
     "Venders/STB",
-
-    --"Venders/VKBootstrap/src",
-    --"Venders/VMA/include",
-    --"Venders/Volk",
-    --"Venders/VulkanHeaders/include"
 }
 
 links
@@ -260,24 +246,9 @@ filter "configurations:Debug"
     defines "BTD_DEBUG"
     symbols "On"
 
-    links
-    {
-        --"Venders/SDL/Build/RelWithDebInfo/SDL3.lib"
-    }
-
 filter "configurations:Release"
     defines "BTD_RELEASE"
     optimize "On"
-
-    flags
-    {
-        
-    }
-
-    links
-    {
-       --"Venders/SDL/Build/Release/SDL3.lib"
-    }
 
 filter "configurations:Dist"
     defines "BTD_DIST"
@@ -291,11 +262,6 @@ filter "configurations:Dist"
     flags
     {
        "LinkTimeOptimization"
-    }
-
-    links
-    {
-       --"Venders/SDL/Build/MinSizeRel/SDL3.lib"
     }
 
 --compiler for generating the "ROM"s for the fake console
@@ -316,14 +282,6 @@ files
     "Cublic/includes/**.hpp",
     "Cublic/src/**.cpp",
 
-    --volk
-    --"Venders/Volk/volk.c",
-    --"Venders/Volk/volk.h",
-
-    ---vulkan bootstrapper
-    --"Venders/VKBootstrap/src/**.cpp",
-    --"Venders/VKBootstrap/src/**.h"
-
     ---imgui
 }
 
@@ -331,19 +289,8 @@ includedirs
 {
     "Cublic/includes",
 
-    --"Venders/SDL/include",
     "Venders/FMT/include",
     "Venders/GLM"
-
-    --"Venders/VKBootstrap/src",
-    --"Venders/VMA/include",
-    --"Venders/Volk",
-    --"Venders/VulkanHeaders/include"
-}
-
-links
-{
-    
 }
 
 defines
@@ -404,24 +351,9 @@ filter "configurations:Debug"
     defines "BTD_DEBUG"
     symbols "On"
 
-    links
-    {
-        --"Venders/SDL/Build/RelWithDebInfo/SDL3.lib"
-    }
-
 filter "configurations:Release"
     defines "BTD_RELEASE"
     optimize "On"
-
-    flags
-    {
-        
-    }
-
-    links
-    {
-       --"Venders/SDL/Build/Release/SDL3.lib"
-    }
 
 filter "configurations:Dist"
     defines "BTD_DIST"
@@ -435,9 +367,4 @@ filter "configurations:Dist"
     flags
     {
        "LinkTimeOptimization"
-    }
-
-    links
-    {
-       --"Venders/SDL/Build/MinSizeRel/SDL3.lib"
     }
