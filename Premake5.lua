@@ -1,6 +1,6 @@
 workspace "CubasicToolchain"
 architecture "x64"
-startproject "Cubeulator"
+startproject "FamicubeEmulator"
 
 configurations
 {
@@ -10,8 +10,8 @@ configurations
 }
 
 --the emulator for the fake console
-project "Cubeulator"
-location "Cubeulator"
+project "Famicube-Emulator"
+location "FamicubeEmulator"
 kind "ConsoleApp"
 language "C++"
 
@@ -22,10 +22,10 @@ objdir ("bin-obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}-%{cfg.startpr
 files 
 {
     ---base code
-    "Cubeulator/includes/**.h",
-    "Cubeulator/src/**.c",
-    "Cubeulator/includes/**.hpp",
-    "Cubeulator/src/**.cpp",
+    "FamicubeEmulator/includes/**.h",
+    "FamicubeEmulator/src/**.c",
+    "FamicubeEmulator/includes/**.hpp",
+    "FamicubeEmulator/src/**.cpp",
 
     --volk
     "Venders/Volk/volk.c",
@@ -40,7 +40,7 @@ files
 
 includedirs
 {
-    "Cubeulator/includes",
+    "FamicubeEmulator/includes",
 
     "Venders/SDL/include",
     "Venders/FMT/include",
