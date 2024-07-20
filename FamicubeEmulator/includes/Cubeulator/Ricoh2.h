@@ -7,7 +7,7 @@ struct RGBColor {
     uint8_t r, g, b;
 };
 
-const RGBColor FamiCubePalette[64] = {
+const RGBColor CubeulatorPalette[64] = {
     {0, 0, 0},         // Color 0
     {0, 23, 125},      // Color 1
     {2, 74, 202},      // Color 2

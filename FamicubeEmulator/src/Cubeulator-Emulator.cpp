@@ -1,13 +1,13 @@
-#include "Famicube-Emulator.h"
+#include "Cubeulator/Cubeulator-Emulator.h"
 #include <iostream>
 
-FamicubeEmulator::FamicubeEmulator() : window(nullptr), renderer(nullptr), isRunning(false) {}
+CubeulatorEmulator::CubeulatorEmulator() : window(nullptr), renderer(nullptr), isRunning(false) {}
 
-FamicubeEmulator::~FamicubeEmulator() {
+CubeulatorEmulator::~CubeulatorEmulator() {
     cleanup();
 }
 
-void FamicubeEmulator::cleanup() {
+void CubeulatorEmulator::cleanup() {
     if (renderer != nullptr) {
         SDL_DestroyRenderer(renderer);
         renderer = nullptr;
@@ -21,13 +21,13 @@ void FamicubeEmulator::cleanup() {
     SDL_Quit();
 }
 
-void FamicubeEmulator::initialize() {
+void CubeulatorEmulator::initialize() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
         return;
     }
 
-    window = SDL_CreateWindow("Famicube Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Cubeulator Emulator", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
     if (window == nullptr) {
         std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
         SDL_Quit();
@@ -48,7 +48,7 @@ void FamicubeEmulator::initialize() {
     core->reset();
 }
 
-void FamicubeEmulator::run() {
+void CubeulatorEmulator::run() {
     while (isRunning) {
         // Handle events
         SDL_Event e;
@@ -77,7 +77,7 @@ bool hasExtension(const std::string& filePath, const std::string& extension) {
 }
 
 int main(int argc, char* argv[]) {
-    FamicubeEmulator emulator;
+    CubeulatorEmulator emulator;
     emulator.initialize();
 
     // Check if a file path was provided (file dropped on the executable)
@@ -112,7 +112,7 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void FamicubeEmulator::loadRom(const std::string& filePath) {
+void CubeulatorEmulator::loadRom(const std::string& filePath) {
     // Load the ROM file from the specified file path
     std::cout << "Loading ROM: " << filePath << std::endl;
     RomLoaded = true;

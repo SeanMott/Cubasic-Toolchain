@@ -1,4 +1,4 @@
-#include "CubixCore.h"
+#include "Cubeulator/CubixCore.h"
 
 CubixCoreCPU::CubixCoreCPU() : programCounter(0), stackPointer(0), statusRegister(0), memoryManager(std::make_unique<MemoryManager>(65536)) {
     generalRegisters.fill(0);

@@ -24,7 +24,7 @@ static inline glm::vec3 findClosestColor(const glm::vec3& color)
     int minDistanceSquared = std::numeric_limits<int>::max();
     glm::vec3 closestColor = color;
 
-    for (const auto& paletteColor : FamiCubePalette) {
+    for (const auto& paletteColor : CubeulatorPalette) {
         glm::vec3 delta = color - paletteColor;
         int distanceSquared = (delta.r * delta.r + delta.g * delta.g + delta.b * delta.b);
 

@@ -7,7 +7,7 @@
 #include <vector>
 
 //map values for RGB values
-static const glm::vec3 FamiCubePalette[64] = {
+static const glm::vec3 CubeulatorPalette[64] = {
 	{0, 0, 0},         // Color 0
 	{0, 23, 125},      // Color 1
 	{2, 74, 202},      // Color 2

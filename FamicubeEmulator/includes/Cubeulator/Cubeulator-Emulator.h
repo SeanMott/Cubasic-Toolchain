@@ -1,5 +1,5 @@
-#ifndef FAMICUBE_EMULATOR_H
-#define FAMICUBE_EMULATOR_H
+#ifndef Cubeulator_EMULATOR_H
+#define Cubeulator_EMULATOR_H
 
 #if defined(_WIN32)
 #define SDL_MAIN_HANDLED
@@ -9,12 +9,12 @@
 #include <string>
 #include "CubixCore.h"
 
-class FamicubeEmulator {
+class CubeulatorEmulator {
 public:
     bool RomLoaded = false;
 
-    FamicubeEmulator();
-    ~FamicubeEmulator();
+    CubeulatorEmulator();
+    ~CubeulatorEmulator();
 
     void cleanup();
 
@@ -32,4 +32,4 @@ private:
     bool isRunning;
 };
 
-#endif // FAMICUBE_EMULATOR_H
+#endif // Cubeulator_EMULATOR_H
