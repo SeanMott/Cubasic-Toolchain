@@ -60,7 +60,7 @@ GetIfNotThere(BOOTSTRAPPER_GIT_REPO_LINK, "Venders/VKBootstrap")
 #generate Premake file
 premakeCode = """workspace "CubasicToolchain"
 architecture "x64"
-startproject "FamicubeEmulator"
+startproject "Cubeulator"
 
 configurations
 {
@@ -70,8 +70,8 @@ configurations
 }
 
 --the emulator for the fake console
-project "Famicube-Emulator"
-location "FamicubeEmulator"
+project "Cubeulator"
+location "Cubeulator"
 kind "ConsoleApp"
 language "C++"
 
@@ -82,10 +82,10 @@ objdir (\"bin-obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}-%{cfg.startp
 files 
 {
     ---base code
-    "FamicubeEmulator/includes/**.h",
-    "FamicubeEmulator/src/**.c",
-    "FamicubeEmulator/includes/**.hpp",
-    "FamicubeEmulator/src/**.cpp",
+    "Cubeulator/includes/**.h",
+    "Cubeulator/src/**.c",
+    "Cubeulator/includes/**.hpp",
+    "Cubeulator/src/**.cpp",
 
     --volk
     "Venders/Volk/volk.c",
@@ -100,7 +100,7 @@ files
 
 includedirs
 {
-    "FamicubeEmulator/includes",
+    "Cubeulator/includes",
 
     "Venders/SDL/include",
     "Venders/FMT/include",
@@ -434,7 +434,7 @@ file = open("Premake5.lua", "w")
 file.write(premakeCode)
 file.close()
 
-subprocess.run([os.path.dirname(os.path.realpath(__file__)) + "/tools/premake5.exe", "vs2022"],
+subprocess.run(["GenProject.bat"],
         shell=True)
 
 #performs test buillds
