@@ -1,0 +1,1 @@
+python ProjectSetup.py
