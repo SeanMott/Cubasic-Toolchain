@@ -510,4 +510,14 @@ file.close()
 subprocess.run(["GenProjects.bat"],
         shell=True)
 
+#performs test buillds
+subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Debug"],
+        shell=True)
+subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
+        shell=True)
+subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Dist"],
+        shell=True)
+
+#moves SDL to the right folder
+
 print("\n\n\n------Project is all ready to go :3-------")

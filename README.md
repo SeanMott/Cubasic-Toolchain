@@ -6,7 +6,7 @@ A toolchain for using Cubasic and FCMAKE to output PASM
 ## Windows
 
 ### Step 1: Deps
-- Python 3 and Visual Studio 2022 or beyond is required
+- Python 3, Visual Studio 2022 or beyond, and CMake is required
 
 - MsBuild must be in the System Path. It can be found after installing Visual Studio, roughly at `C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin`
 
@@ -14,7 +14,7 @@ A toolchain for using Cubasic and FCMAKE to output PASM
 
 - run `ProjectSetup.py` in the root of the folder (ie where this README is)
 
-- wait for the ProjectSetup to download everything, build SDL 3, and generate the project
+- wait for `ProjectSetup` to download everything, build SDL 3, generate the project, perform a test build and move SDL to the bin folder.
 
 - open Visual Studio and build
 
