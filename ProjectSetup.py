@@ -4,6 +4,7 @@ Sets up the project and gathers all the dependices and compiles the ones that ar
 
 import subprocess
 import os
+from git import Repo
 
 #get repos
 SDL_GIT_REPO_LINK = "https://github.com/libsdl-org/SDL.git"
@@ -18,22 +19,23 @@ VOLK_GIT_REPO_LINK = "https://github.com/zeux/volk.git"
 BOOTSTRAPPER_GIT_REPO_LINK = "https://github.com/charles-lunarg/vk-bootstrap.git"
 
 #if the folder doesn't exist, we download it
-def GetIfNotThere(URL, outputDir):
+def GetIfNotThere(URL, outputDir, branch = "main"):
     if not os.path.exists(outputDir):
-        subprocess.run(["git", "clone", URL, outputDir],
-        shell=True)
+        Repo.clone_from(URL, outputDir, branch = branch)
+        #subprocess.run(["git", "clone", URL, outputDir],
+        #shell=True)
 
-#gets SDL 3
-GetIfNotThere(SDL_GIT_REPO_LINK, "Venders/SDL")
+#gets SDL 2
+GetIfNotThere(SDL_GIT_REPO_LINK, "Venders/SDL", branch = "SDL2")
 
-#builds SDL 3
+#builds SDL 2
 subprocess.run(["cmake", "-S", "Venders/SDL", "-B", "Venders/SDL/Build"],
         shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL3.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
+subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
         shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL3.sln", "-maxCpuCount:4", "/property:Configuration=MinSizeRel"],
+subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=MinSizeRel"],
         shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL3.sln", "-maxCpuCount:4", "/property:Configuration=RelWithDebInfo"],
+subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=RelWithDebInfo"],
         shell=True)
            
 #gets FMT
@@ -58,7 +60,8 @@ GetIfNotThere(VOLK_GIT_REPO_LINK, "Venders/Volk")
 GetIfNotThere(BOOTSTRAPPER_GIT_REPO_LINK, "Venders/VKBootstrap")
 
 #generate Premake file
-premakeCode = """workspace "CubasicToolchain"
+#premakeCode = """workspace "CubasicToolchain"
+"""
 architecture "x64"
 startproject "Cubeulator"
 
@@ -430,20 +433,20 @@ filter "configurations:Dist"
     }
 """
 
-file = open("Premake5.lua", "w")
-file.write(premakeCode)
-file.close()
+#file = open("Premake5.lua", "w")
+#file.write(premakeCode)
+#file.close()
 
-subprocess.run(["GenProject.bat"],
-        shell=True)
+#subprocess.run(["GenProject.bat"],
+#        shell=True)
 
 #performs test buillds
-subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Debug"],
-        shell=True)
-subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
-        shell=True)
-subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Dist"],
-        shell=True)
+#subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Debug"],
+#        shell=True)
+#subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
+#        shell=True)
+#subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Dist"],
+#        shell=True)
 
 #moves SDL to the right folder
 
