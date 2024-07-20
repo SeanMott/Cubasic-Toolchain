@@ -5,6 +5,11 @@
 #include <vector>
 #include <string>
 
+#define FMT_HEADER_ONLY
+#include <fmt/color.h>
+#include <fmt/core.h>
+#include <fmt/os.h>
+
 namespace Cube::Frontend
 {
 	//defines a token type
@@ -22,5 +27,5 @@ namespace Cube::Frontend
 	};
 
 	//lexes tokens
-	std::vector<std::string> LexTokens(const std::string& code);
+	std::vector<Token> LexTokens(const std::string& code);
 }

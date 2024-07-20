@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include <Cublic/Lex.hpp>
+
 //entry point
 int main()
 {
@@ -24,7 +26,7 @@ int main()
 	t.close();
 
 	//lex Cubasic
-	//std::vector<Cube::Frontend::Token> tokens = Cube::Frontend::LexCode(code);
+	std::vector<Cube::Frontend::Token> tokens = Cube::Frontend::LexTokens(code);
 
 	//generate AST
 
@@ -34,5 +36,6 @@ int main()
 
 		//C++ generate
 
+	getchar();
 	return 0;
 }
