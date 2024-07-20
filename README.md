@@ -14,11 +14,11 @@ A toolchain for using Cubasic and FCMAKE to output PASM
 
 - run `ProjectSetup.py` in the root of the folder (ie where this README is)
 
-- wait the for ProjectSetup to download everything, build SDL 3, and generate the project
+- wait for the ProjectSetup to download everything, build SDL 3, and generate the project
 
 - open Visual Studio and build
 
-- go into `Venders/SDL/Build` and pick a flavor of SDL by grabbing the DLL in `Release`, `RelWithDebInfo`, or `MinSizeRel`
+- go into `Venders/SDL/Build` and pick a flavor of SDL by grabbing the DLL in `Release`, `RelWithDebInfo`, or `MinSizeRel`. Throw it next to `FamicubeEmulator.exe` build in `bin/BuildTypeOfYourChoiceHere/Famicube-Emulator`
 
 - Enjoy :3
 
