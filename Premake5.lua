@@ -25,15 +25,7 @@ files
     "Cubeulator/includes/**.h",
     "Cubeulator/src/**.c",
     "Cubeulator/includes/**.hpp",
-    "Cubeulator/src/**.cpp",
-
-    --volk
-    "Venders/Volk/volk.c",
-    "Venders/Volk/volk.h",
-
-    ---vulkan bootstrapper
-    "Venders/VKBootstrap/src/**.cpp",
-    "Venders/VKBootstrap/src/**.h"
+    "Cubeulator/src/**.cpp"
 
     ---imgui
 }
@@ -44,25 +36,14 @@ includedirs
 
     "Venders/SDL/include",
     "Venders/FMT/include",
-    "Venders/GLM",
-
-    "Venders/VKBootstrap/src",
-    "Venders/VMA/include",
-    "Venders/Volk",
-    "Venders/VulkanHeaders/include"
-}
-
-links
-{
-    
+    "Venders/GLM"
 }
 
 defines
 {
     "GLM_FORCE_RADIANS",
     "GLM_FORCE_DEPTH_ZERO_TO_ONE",
-    "GLM_ENABLE_EXPERIMENTAL",
-    "VK_NO_PROTOTYPES"
+    "GLM_ENABLE_EXPERIMENTAL"
 }
 
 flags
@@ -82,8 +63,7 @@ filter "system:windows"
     defines
     {
         "Window_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_WIN32_KHR"
+        "Desktop_Build"
     }
 
 filter "system:linux"
@@ -94,8 +74,7 @@ filter "system:linux"
     defines
     {
         "Linux_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_XLIB_KHR"
+        "Desktop_Build"
     }
 
     filter "system:mac"
@@ -106,8 +85,7 @@ filter "system:linux"
     defines
     {
         "MacOS_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_MACOS_MVK"
+        "Desktop_Build"
     }
 
 --configs
@@ -117,21 +95,16 @@ filter "configurations:Debug"
 
     links
     {
-        "Venders/SDL/Build/RelWithDebInfo/SDL3.lib"
+        "Venders/SDL/Build/RelWithDebInfo/SDL2.lib"
     }
 
 filter "configurations:Release"
     defines "BTD_RELEASE"
     optimize "On"
 
-    flags
-    {
-        
-    }
-
     links
     {
-       "Venders/SDL/Build/Release/SDL3.lib"
+       "Venders/SDL/Build/Release/SDL2.lib"
     }
 
 filter "configurations:Dist"
@@ -150,7 +123,7 @@ filter "configurations:Dist"
 
     links
     {
-       "Venders/SDL/Build/MinSizeRel/SDL3.lib"
+       "Venders/SDL/Build/MinSizeRel/SDL2.lib"
     }
 
 --tool to map sprite pixel data to the RGBA values supported by the fake console
@@ -169,7 +142,7 @@ files
     "PixelCube/includes/**.h",
     "PixelCube/src/**.c",
     "PixelCube/includes/**.hpp",
-    "PixelCube/src/**.cpp",
+    "PixelCube/src/**.cpp"
 
     ---imgui
 }
@@ -180,20 +153,14 @@ includedirs
 
     "Venders/FMT/include",
     "Venders/GLM",
-    "Venders/STB",
-}
-
-links
-{
-    
+    "Venders/STB"
 }
 
 defines
 {
     "GLM_FORCE_RADIANS",
     "GLM_FORCE_DEPTH_ZERO_TO_ONE",
-    "GLM_ENABLE_EXPERIMENTAL",
-    "VK_NO_PROTOTYPES"
+    "GLM_ENABLE_EXPERIMENTAL"
 }
 
 flags
@@ -213,8 +180,7 @@ filter "system:windows"
     defines
     {
         "Window_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_WIN32_KHR"
+        "Desktop_Build"
     }
 
 filter "system:linux"
@@ -225,8 +191,7 @@ filter "system:linux"
     defines
     {
         "Linux_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_XLIB_KHR"
+        "Desktop_Build"
     }
 
     filter "system:mac"
@@ -237,8 +202,7 @@ filter "system:linux"
     defines
     {
         "MacOS_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_MACOS_MVK"
+        "Desktop_Build"
     }
 
 --configs
@@ -280,7 +244,7 @@ files
     "Cublic/includes/**.h",
     "Cublic/src/**.c",
     "Cublic/includes/**.hpp",
-    "Cublic/src/**.cpp",
+    "Cublic/src/**.cpp"
 
     ---imgui
 }
@@ -297,8 +261,7 @@ defines
 {
     "GLM_FORCE_RADIANS",
     "GLM_FORCE_DEPTH_ZERO_TO_ONE",
-    "GLM_ENABLE_EXPERIMENTAL",
-    "VK_NO_PROTOTYPES"
+    "GLM_ENABLE_EXPERIMENTAL"
 }
 
 flags
@@ -318,8 +281,7 @@ filter "system:windows"
     defines
     {
         "Window_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_WIN32_KHR"
+        "Desktop_Build"
     }
 
 filter "system:linux"
@@ -330,8 +292,7 @@ filter "system:linux"
     defines
     {
         "Linux_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_XLIB_KHR"
+        "Desktop_Build"
     }
 
     filter "system:mac"
@@ -342,8 +303,7 @@ filter "system:linux"
     defines
     {
         "MacOS_Build",
-        "Desktop_Build",
-        "VK_USE_PLATFORM_MACOS_MVK"
+        "Desktop_Build"
     }
 
 --configs
