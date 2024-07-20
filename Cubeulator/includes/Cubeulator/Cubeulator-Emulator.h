@@ -4,7 +4,7 @@
 #if defined(_WIN32)
 #define SDL_MAIN_HANDLED
 #endif
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <memory>
 #include <string>
 #include "CubixCore.h"

@@ -19,7 +19,7 @@ VOLK_GIT_REPO_LINK = "https://github.com/zeux/volk.git"
 BOOTSTRAPPER_GIT_REPO_LINK = "https://github.com/charles-lunarg/vk-bootstrap.git"
 
 #if the folder doesn't exist, we download it
-def GetIfNotThere(URL, outputDir, branch = "main"):
+def GetIfNotThere(URL, outputDir, branch = "master"):
     if not os.path.exists(outputDir):
         Repo.clone_from(URL, outputDir, branch = branch)
         #subprocess.run(["git", "clone", URL, outputDir],
@@ -105,7 +105,7 @@ includedirs
 {
     "Cubeulator/includes",
 
-    "Venders/SDL/include",
+    "C:/Compilers/Cubasic-Toolchain/Venders/SDL/include",
     "Venders/FMT/include",
     "Venders/GLM",
 
@@ -180,7 +180,7 @@ filter "configurations:Debug"
 
     links
     {
-        "Venders/SDL/Build/RelWithDebInfo/SDL3.lib"
+        "Venders/SDL/Build/RelWithDebInfo/SDL2.lib"
     }
 
 filter "configurations:Release"
@@ -194,7 +194,7 @@ filter "configurations:Release"
 
     links
     {
-       "Venders/SDL/Build/Release/SDL3.lib"
+       "Venders/SDL/Build/Release/SDL2.lib"
     }
 
 filter "configurations:Dist"
@@ -213,7 +213,7 @@ filter "configurations:Dist"
 
     links
     {
-       "Venders/SDL/Build/MinSizeRel/SDL3.lib"
+       "Venders/SDL/Build/MinSizeRel/SDL2.lib"
     }
 
 --tool to map sprite pixel data to the RGBA values supported by the fake console
