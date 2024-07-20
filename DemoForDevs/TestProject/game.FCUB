@@ -1,0 +1,437 @@
+COMPILER_VERSION=1.0
+HEADER_CHIPSET=Basic
+HEADER_LICENSEE=DevName
+HEADER_MAGIC=FCUB
+HEADER_RAMSIZE=4KB
+HEADER_ROMSIZE=64KB
+HEADER_RULEBREAKER=False
+HEADER_TITLE=Example Game
+HEADER_VERSION=1.0
+HEADER_ZIPDISKSIZE=1.44MB
+ROM_OUTPUT=game.FCUB
+
+
+
+
+
+PRINT "Starting
+
+PRINT "Starting
+CALL 
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+func_Main():
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+func_Main():
+PRINT "Executing
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+func_Main():
+PRINT "Executing
+RET
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+func_Main():
+PRINT "Executing
+RET
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+func_Main():
+PRINT "Executing
+RET
+PRINT "This
+
+PRINT "Starting
+CALL 
+CALL SUBROUTINE_PrintMessage
+JMP SkipSection
+LOAD 0, R0
+STORE R0, result
+INIT_LOOP i
+CHECK_CONDITION 1..5
+CALL 
+INCREMENT i
+CHECK_LOOP_CONDITION i
+PRINT "Result:
+EVAL_CONDITION result
+JMP_IF_FALSE label_true_0
+THEN_PART
+JMP label_end_0
+label_true_0:
+ELSE_PART
+label_end_0:
+PRINT "Result
+PRINT "Result
+HALT
+READ_INPUT "Enter
+PRINT "Hello,
+RET
+func_Main():
+PRINT "Executing
+RET
+PRINT "This
+HALT
+
