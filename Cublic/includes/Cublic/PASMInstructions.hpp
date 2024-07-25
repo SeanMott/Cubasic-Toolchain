@@ -47,6 +47,7 @@ namespace Cube::Backend::Instructions
 		NOT, // Calculate the two's compliment of a destination register. Set zero if result is zero. Clear carry.
 		HALT, // Stops program execution.
 		SYSCALL, // Calls a predefined system call; using r7 as the syscall number.
+		PRINT, //prints the register
 
 		Count
 	};
@@ -91,6 +92,9 @@ namespace Cube::Backend::Instructions
 		"XORIMM",
 		"NOT",
 		"HALT",
-		"SYSCALL"
-	}
+		"SYSCALL",
+		"PRINT"
+	};
+
+	//maps the instruction keywords
 }
