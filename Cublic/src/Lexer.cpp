@@ -6,6 +6,7 @@ static inline Cube::Frontend::Token GenerateToken_Literal_String(const size_t& l
 	Cube::Frontend::Token t;
 	t.data = data; t.lineCount = lineCount;
 	t.type = Cube::Frontend::TokenType::Literal_String;
+	//t.Print();
 	return t;
 }
 
@@ -17,6 +18,7 @@ static inline Cube::Frontend::Token GenerateToken_Keyword(const size_t& lineCoun
 	t.data = data; t.lineCount = lineCount;
 	t.type = Cube::Frontend::TokenType::Function;
 	t.keyword = keyword;
+	//t.Print();
 	return t;
 }
 
@@ -28,6 +30,7 @@ static inline Cube::Frontend::Token GenerateToken_Identifier(const size_t& lineC
 	Cube::Frontend::Token t;
 	t.data = data; t.lineCount = lineCount;
 	t.type = Cube::Frontend::TokenType::Identifier;
+	//t.Print();
 	return t;
 }
 
