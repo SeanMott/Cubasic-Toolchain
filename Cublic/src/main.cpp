@@ -280,6 +280,8 @@ enum class TokenType
     STOP,
 
     STRING_LITERAL,
+    DIGIT_LITERAL,
+    //HEX_LITERAL,
 
     IDENTIFIER,
     
@@ -309,208 +311,200 @@ static TokenType keywordToTokenType(const char* value) {
 }
 
 // Token structure
-typedef struct {
+struct Token
+{
     TokenType type;
-    char* value;
-} Token;
+    std::string value = "";
+};
 
-// Tokenize function prototypes
-Token* tokenize(const char* input, size_t* token_count);
-void parseStatements(Token* tokens, size_t token_count);
+//skips a comment
+static void skipComment(const char* source, const size_t& sourceLength, size_t& charIndex) {
+    while (charIndex < sourceLength && source[charIndex] != '\n')
+    {
+        charIndex++;
 
-// Helper functions
-static void advance(const char** ptr, char* current_char) {
-    (*ptr)++;
-    *current_char = (**ptr) ? **ptr : '\0';
-}
-
-static void skipWhitespace(const char** ptr, char* current_char) {
-    while (**ptr && isspace(**ptr)) {
-        advance(ptr, current_char);
+        // Skip the newline character if it exists
+        if (source[charIndex] == '\n')
+            break;
     }
 }
 
-static void skipComment(const char** ptr, char* current_char) {
-    while (**ptr && **ptr != '\n') {
-        advance(ptr, current_char);
-    }
-    // Skip the newline character if it exists
-    if (**ptr == '\n') {
-        advance(ptr, current_char);
-    }
-}
-
-static char* readIdentifier(const char** ptr, char* current_char) {
+//process a identifier
+static char* readIdentifier(const char* source, const size_t& sourceLength, size_t& charIndex)
+{
     size_t len = 0;
     char buffer[256];
 
-    while (**ptr && (isalnum(**ptr) || **ptr == '_')) {
-        buffer[len++] = **ptr;
-        advance(ptr, current_char);
+    while (charIndex < sourceLength && source[charIndex] && (isalnum(source[charIndex]) || source[charIndex] == '_')) {
+        buffer[len++] = source[charIndex];
+        charIndex++;
     }
-    buffer[len] = '\0';
 
+    buffer[len] = '\0'; //sets the end to zero
+    charIndex--; //back a index
+   
     char* result = (char*)malloc(len + 1);
-    strcpy(result, buffer);
+    strncpy(result, buffer, len + 1);
     return result;
 }
 
-static char* readStringLiteral(const char** ptr, char* current_char) {
+//reads a string literal
+static char* readStringLiteral(const char* source, const size_t& sourceLength, size_t& charIndex) {
     size_t len = 0;
     char buffer[1024];
 
-    advance(ptr, current_char); // Skip the opening quote
 
-    while (**ptr && **ptr != '"') {
-        if (**ptr == '\\') { // Handle escape sequences
-            advance(ptr, current_char); // Skip the backslash
-            if (**ptr == '"' || **ptr == '\\') {
-                buffer[len++] = **ptr;
-                advance(ptr, current_char);
+    while (charIndex < sourceLength && source[charIndex] && source[charIndex] != '"') {
+        if (source[charIndex] == '\\') { // Handle escape sequences
+            charIndex++; // Skip the backslash
+            if (charIndex < sourceLength && source[charIndex] == '"' || source[charIndex] == '\\') {
+                buffer[len++] = source[charIndex];
+                charIndex++;
             }
             else {
                 buffer[len++] = '\\'; // Just add backslash if escape is unknown
             }
         }
         else {
-            buffer[len++] = **ptr;
-            advance(ptr, current_char);
+            buffer[len++] = source[charIndex];
+            charIndex++;
         }
     }
 
     buffer[len] = '\0';
 
-    if (**ptr == '"') {
-        advance(ptr, current_char); // Skip the closing quote
+    if (source[charIndex] == '"') {
+        charIndex++; // Skip the closing quote
     }
 
     char* result = (char*)malloc(len + 1);
-    strcpy(result, buffer);
+    strncpy(result, buffer, len + 1);
     return result;
 }
 
-Token* tokenize(const char* input, size_t* token_count) {
-    const char* ptr = input;
-    char current_char = *ptr;
+std::vector<Token> tokenize(const char* input)
+{
+    const size_t sourceLength = strlen(input);
 
-    Token* tokens = NULL;
-    size_t token_capacity = 0;
-    size_t token_index = 0;
+    std::vector<Token> tokens; tokens.reserve(10);
 
-    while (current_char != '\0') {
-        skipWhitespace(&ptr, &current_char);
+    for(size_t c = 0; c < sourceLength; ++c)
+    {
+        //if white space or tab
+        if (isspace(input[c]) || input[c] == '\t')
+            continue;
 
-        if (current_char == '\0') break;
+        //leave if 0
+        if (input[c] == '\0') break;
 
         // Handle comments
-        if (current_char == '/' && *(ptr + 1) == '/') {
-            advance(&ptr, &current_char); // skip '/'
-            advance(&ptr, &current_char); // skip '/'
-            skipComment(&ptr, &current_char);
+        if (c + 1 < sourceLength && input[c] == '/' && input[c + 1] == '/')
+        {
+            c += 1; // skip '/' and '/'
+            skipComment(input, sourceLength, c);
             continue; // skip to the next iteration
         }
 
         // Handle string literals
-        else if (current_char == '"') {
-            char* token_value = readStringLiteral(&ptr, &current_char);
-            if (token_index >= token_capacity) {
-                token_capacity = token_capacity ? token_capacity * 2 : 10;
-                tokens = (Token*)realloc(tokens, token_capacity * sizeof(Token));
-            }
+         if (input[c] == '"') 
+         {
+            c++;
+            char* token_value = readStringLiteral(input, sourceLength, c);
 
-            tokens[token_index].type = TokenType::STRING_LITERAL;
-            tokens[token_index].value = token_value;
-            token_index++;
+            Token* token = &tokens.emplace_back(Token());
+            token->type = TokenType::STRING_LITERAL;
+            token->value = token_value;
+            free(token_value);
             continue;
         }
 
         //handles operators
-        else if (current_char == '(' || current_char == ')' || current_char == ',' || current_char == ':')
+         if (input[c] == '(' || input[c] == ')' || input[c] == '[' || input[c] == ']' || input[c] == '<' || input[c] == '>' ||
+            input[c] == ',' || input[c] == ':' || input[c] == '.' || input[c] == '=')
         {
-            if (token_index >= token_capacity) {
-                token_capacity = token_capacity ? token_capacity * 2 : 10;
-                tokens = (Token*)realloc(tokens, token_capacity * sizeof(Token));
-            }
-
-            tokens[token_index].type = TokenType::OPERATOR;
-            tokens[token_index].value = (char*)calloc(1, sizeof(char));
-            tokens[token_index].value[0] = current_char;
-            token_index++;
-            //continue;
+            Token* token = &tokens.emplace_back(Token());
+            token->type = TokenType::OPERATOR;
+            token->value = input[c];
+            continue;
         }
 
-        if (isalpha(current_char)) {
-            char* token_value = readIdentifier(&ptr, &current_char);
+        //process a digit
+        if (isdigit(input[c]))
+        {
+            Token* token = &tokens.emplace_back(Token());
+            token->type = TokenType::DIGIT_LITERAL;
+            token->value = input[c];
+            continue;
+        }
+
+        //process a identifier or keyword
+        if (isalpha(input[c])) {
+            
+            char* token_value = readIdentifier(input, sourceLength, c);
             TokenType type = keywordToTokenType(token_value);
 
-            if (token_index >= token_capacity) {
-                token_capacity = token_capacity ? token_capacity * 2 : 10;
-                tokens = (Token*)realloc(tokens, token_capacity * sizeof(Token));
-            }
+            Token* token = &tokens.emplace_back(Token());
+            token->type = type;
+            token->value = token_value;
+            free(token_value);
+            continue;
+        }
 
-            tokens[token_index].type = type;
-            tokens[token_index].value = token_value;
-            token_index++;
-        }
-        else {
-            Token invalid_token = { TokenType::INVALID, NULL };
-            if (token_index >= token_capacity) {
-                token_capacity = token_capacity ? token_capacity * 2 : 10;
-                tokens = (Token*)realloc(tokens, token_capacity * sizeof(Token));
-            }
-            tokens[token_index++] = invalid_token;
-            advance(&ptr, &current_char);
-        }
+        //sets a invalid index
+        Token invalid_token = { TokenType::INVALID, ""};
+        tokens.emplace_back(invalid_token);
     }
 
-    Token eof_token = { TokenType::END_OF_FILE, NULL };
-    if (token_index >= token_capacity) {
-        token_capacity = token_capacity ? token_capacity * 2 : 10;
-        tokens = (Token*)realloc(tokens, token_capacity * sizeof(Token));
-    }
-    tokens[token_index] = eof_token;
-    *token_count = token_index + 1;
+    //sets a end of file token
+    Token eof_token = { TokenType::END_OF_FILE, ""};
+    tokens.emplace_back(eof_token);
 
     return tokens;
 }
 
-void parseStatements(Token* tokens, size_t token_count) {
-    for (size_t i = 0; i < token_count; ++i) {
-        Token token = tokens[i];
-        switch (token.type) {
-        case TokenType::STOP: printf("Parsing STOP statement\n"); break;
-        case TokenType::INCLUDE: printf("Parsing INCLUDE statement\n"); break;
-        case TokenType::FUNCTION: printf("Parsing FUNCTION statement\n"); break;
-        case TokenType::END: printf("Parsing END statement\n"); break;
-        case TokenType::PRINT: printf("Parsing PRINT statement\n"); break;
-        case TokenType::CALL: printf("Parsing CALL statement\n"); break;
-        case TokenType::RETURN: printf("Parsing RETURN statement\n"); break;
-        case TokenType::INPUT: printf("Parsing INPUT statement\n"); break;
-        case TokenType::IF: printf("Parsing IF statement\n"); break;
-        case TokenType::ELSE: printf("Parsing ELSE statement\n"); break;
-        case TokenType::THEN: printf("Parsing THEN statement\n"); break;
-        case TokenType::NEXT: printf("Parsing NEXT statement\n"); break;
-        case TokenType::FOR: printf("Parsing FOR statement\n"); break;
-        case TokenType::IN: printf("Parsing IN statement\n"); break;
-        case TokenType::SET: printf("Parsing SET statement\n"); break;
-        case TokenType::GOTO: printf("Parsing GOTO statement\n"); break;
-        case TokenType::GOSUB: printf("Parsing GOSUB statement\n"); break;
-        
-        case TokenType::STRING_LITERAL: printf("Parsing STRING_LITERAL: %s\n", token.value); break;
-        
-        case TokenType::IDENTIFIER: printf("Parsing IDENTIFIER: %s\n", token.value); break;
-        
-        case TokenType::OPERATOR: printf("Parsing OPERATOR: %s\n", token.value); break;
+//prints a list of tokens
+void PrintStatements(const std::vector<Token>& tokens)
+{
+    for (size_t i = 0; i < tokens.size(); ++i) 
+    {
+        switch (tokens[i].type) 
+        {
+            case TokenType::STOP: printf("Parsing STOP statement\n"); break;
+            case TokenType::INCLUDE: printf("Parsing INCLUDE statement\n"); break;
+            case TokenType::FUNCTION: printf("Parsing FUNCTION statement\n"); break;
+            case TokenType::END: printf("Parsing END statement\n"); break;
+            case TokenType::PRINT: printf("Parsing PRINT statement\n"); break;
+            case TokenType::CALL: printf("Parsing CALL statement\n"); break;
+            case TokenType::RETURN: printf("Parsing RETURN statement\n"); break;
+            case TokenType::INPUT: printf("Parsing INPUT statement\n"); break;
+            case TokenType::IF: printf("Parsing IF statement\n"); break;
+            case TokenType::ELSE: printf("Parsing ELSE statement\n"); break;
+            case TokenType::THEN: printf("Parsing THEN statement\n"); break;
+            case TokenType::NEXT: printf("Parsing NEXT statement\n"); break;
+            case TokenType::FOR: printf("Parsing FOR statement\n"); break;
+            case TokenType::IN: printf("Parsing IN statement\n"); break;
+            case TokenType::SET: printf("Parsing SET statement\n"); break;
+            case TokenType::GOTO: printf("Parsing GOTO statement\n"); break;
+            case TokenType::GOSUB: printf("Parsing GOSUB statement\n"); break;
+            
+            case TokenType::STRING_LITERAL: printf("Parsing STRING LITERAL: %s\n", tokens[i].value.c_str()); break;
+            case TokenType::DIGIT_LITERAL: printf("Parsing DIGIT LITERAL: %s\n", tokens[i].value.c_str()); break;
+            
+            case TokenType::IDENTIFIER: printf("Parsing IDENTIFIER: %s\n", tokens[i].value.c_str()); break;
+            
+            case TokenType::OPERATOR: printf("Parsing OPERATOR: %s\n", tokens[i].value.c_str()); break;
 
-        case TokenType::INVALID: printf("Error: Invalid statement\n"); break;
-        
-        default: printf("Error: Unknown token type\n"); break;
+            case TokenType::END_OF_FILE: printf("----END OF FILE----\n"); break;
+            case TokenType::INVALID: printf("Error: Invalid statement\n"); break;
+            
+            default: printf("Error: Unknown token type\n"); break;
         }
-        free(token.value);  // Free the allocated memory for token value
     }
 }
 
-int main() {
+int main() 
+{
+    //loads code
     std::ifstream t("C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject/Main.cubasic");
     t.seekg(0, std::ios::end);
     size_t size = t.tellg();
@@ -519,12 +513,11 @@ int main() {
     t.read(&source[0], size);
     t.close();
 
-    size_t token_count;
-    Token* tokens = tokenize(source.c_str(), &token_count);
-    parseStatements(tokens, token_count);
-    
-    free(tokens);
-   
+    //lex tokens
+    std::vector<Token> tokens = tokenize(source.c_str());
+    PrintStatements(tokens);
+    tokens.clear();
+
     getchar();
     return 0;
 }
