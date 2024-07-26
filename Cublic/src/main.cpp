@@ -249,274 +249,29 @@ int main(int args, const char* argv[])
 #include <string.h>
 #include <ctype.h>
 
-// Token types
-enum class TokenType
-{
-    INCLUDE = 0,
-    
-    PRINT,
-    
-    CALL,
-    INPUT,
-
-    IF,
-    ELSE,
-
-    GOTO,
-    GOSUB,
-
-    THEN,
-    NEXT,
-    FOR,
-    IN,
-
-    SET,
-
-    FUNCTION,
-
-    END,
-    RETURN,
-
-    STOP,
-
-    STRING_LITERAL,
-    DIGIT_LITERAL,
-    //HEX_LITERAL,
-
-    IDENTIFIER,
-    
-    OPERATOR,
-
-    END_OF_FILE, INVALID
-};
-
-static TokenType keywordToTokenType(const char* value) {
-    static const struct {
-        const char* keyword;
-        TokenType type;
-    } keywords[] = {
-        {"STOP", TokenType::STOP}, {"INCLUDE", TokenType::INCLUDE}, {"FUNCTION", TokenType::FUNCTION},
-        {"END", TokenType::END}, {"PRINT", TokenType::PRINT}, {"CALL", TokenType::CALL}, {"RETURN", TokenType::RETURN},
-        {"INPUT", TokenType::INPUT}, {"IF", TokenType::IF}, {"ELSE", TokenType::ELSE}, {"THEN", TokenType::THEN},
-        {"NEXT", TokenType::NEXT}, {"FOR", TokenType::FOR}, {"IN", TokenType::IN}, {"SET", TokenType::SET},
-        {"GOTO", TokenType::GOTO}, {"GOSUB", TokenType::GOSUB}
-    };
-
-    for (size_t i = 0; i < sizeof(keywords) / sizeof(keywords[0]); ++i) {
-        if (strcmp(value, keywords[i].keyword) == 0) {
-            return keywords[i].type;
-        }
-    }
-    return TokenType::IDENTIFIER;
-}
-
-// Token structure
-struct Token
-{
-    TokenType type;
-    std::string value = "";
-};
-
-//skips a comment
-static void skipComment(const char* source, const size_t& sourceLength, size_t& charIndex) {
-    while (charIndex < sourceLength && source[charIndex] != '\n')
-    {
-        charIndex++;
-
-        // Skip the newline character if it exists
-        if (source[charIndex] == '\n')
-            break;
-    }
-}
-
-//process a identifier
-static char* readIdentifier(const char* source, const size_t& sourceLength, size_t& charIndex)
-{
-    size_t len = 0;
-    char buffer[256];
-
-    while (charIndex < sourceLength && source[charIndex] && (isalnum(source[charIndex]) || source[charIndex] == '_')) {
-        buffer[len++] = source[charIndex];
-        charIndex++;
-    }
-
-    buffer[len] = '\0'; //sets the end to zero
-    charIndex--; //back a index
-   
-    char* result = (char*)malloc(len + 1);
-    strncpy(result, buffer, len + 1);
-    return result;
-}
-
-//reads a string literal
-static char* readStringLiteral(const char* source, const size_t& sourceLength, size_t& charIndex) {
-    size_t len = 0;
-    char buffer[1024];
-
-
-    while (charIndex < sourceLength && source[charIndex] && source[charIndex] != '"') {
-        if (source[charIndex] == '\\') { // Handle escape sequences
-            charIndex++; // Skip the backslash
-            if (charIndex < sourceLength && source[charIndex] == '"' || source[charIndex] == '\\') {
-                buffer[len++] = source[charIndex];
-                charIndex++;
-            }
-            else {
-                buffer[len++] = '\\'; // Just add backslash if escape is unknown
-            }
-        }
-        else {
-            buffer[len++] = source[charIndex];
-            charIndex++;
-        }
-    }
-
-    buffer[len] = '\0';
-
-    if (source[charIndex] == '"') {
-        charIndex++; // Skip the closing quote
-    }
-
-    char* result = (char*)malloc(len + 1);
-    strncpy(result, buffer, len + 1);
-    return result;
-}
-
-std::vector<Token> tokenize(const char* input)
-{
-    const size_t sourceLength = strlen(input);
-
-    std::vector<Token> tokens; tokens.reserve(10);
-
-    for(size_t c = 0; c < sourceLength; ++c)
-    {
-        //if white space or tab
-        if (isspace(input[c]) || input[c] == '\t')
-            continue;
-
-        //leave if 0
-        if (input[c] == '\0') break;
-
-        // Handle comments
-        if (c + 1 < sourceLength && input[c] == '/' && input[c + 1] == '/')
-        {
-            c += 1; // skip '/' and '/'
-            skipComment(input, sourceLength, c);
-            continue; // skip to the next iteration
-        }
-
-        // Handle string literals
-         if (input[c] == '"') 
-         {
-            c++;
-            char* token_value = readStringLiteral(input, sourceLength, c);
-
-            Token* token = &tokens.emplace_back(Token());
-            token->type = TokenType::STRING_LITERAL;
-            token->value = token_value;
-            free(token_value);
-            continue;
-        }
-
-        //handles operators
-         if (input[c] == '(' || input[c] == ')' || input[c] == '[' || input[c] == ']' || input[c] == '<' || input[c] == '>' ||
-            input[c] == ',' || input[c] == ':' || input[c] == '.' || input[c] == '=')
-        {
-            Token* token = &tokens.emplace_back(Token());
-            token->type = TokenType::OPERATOR;
-            token->value = input[c];
-            continue;
-        }
-
-        //process a digit
-        if (isdigit(input[c]))
-        {
-            Token* token = &tokens.emplace_back(Token());
-            token->type = TokenType::DIGIT_LITERAL;
-            token->value = input[c];
-            continue;
-        }
-
-        //process a identifier or keyword
-        if (isalpha(input[c])) {
-            
-            char* token_value = readIdentifier(input, sourceLength, c);
-            TokenType type = keywordToTokenType(token_value);
-
-            Token* token = &tokens.emplace_back(Token());
-            token->type = type;
-            token->value = token_value;
-            free(token_value);
-            continue;
-        }
-
-        //sets a invalid index
-        Token invalid_token = { TokenType::INVALID, ""};
-        tokens.emplace_back(invalid_token);
-    }
-
-    //sets a end of file token
-    Token eof_token = { TokenType::END_OF_FILE, ""};
-    tokens.emplace_back(eof_token);
-
-    return tokens;
-}
-
-//prints a list of tokens
-void PrintStatements(const std::vector<Token>& tokens)
-{
-    for (size_t i = 0; i < tokens.size(); ++i) 
-    {
-        switch (tokens[i].type) 
-        {
-            case TokenType::STOP: printf("Parsing STOP statement\n"); break;
-            case TokenType::INCLUDE: printf("Parsing INCLUDE statement\n"); break;
-            case TokenType::FUNCTION: printf("Parsing FUNCTION statement\n"); break;
-            case TokenType::END: printf("Parsing END statement\n"); break;
-            case TokenType::PRINT: printf("Parsing PRINT statement\n"); break;
-            case TokenType::CALL: printf("Parsing CALL statement\n"); break;
-            case TokenType::RETURN: printf("Parsing RETURN statement\n"); break;
-            case TokenType::INPUT: printf("Parsing INPUT statement\n"); break;
-            case TokenType::IF: printf("Parsing IF statement\n"); break;
-            case TokenType::ELSE: printf("Parsing ELSE statement\n"); break;
-            case TokenType::THEN: printf("Parsing THEN statement\n"); break;
-            case TokenType::NEXT: printf("Parsing NEXT statement\n"); break;
-            case TokenType::FOR: printf("Parsing FOR statement\n"); break;
-            case TokenType::IN: printf("Parsing IN statement\n"); break;
-            case TokenType::SET: printf("Parsing SET statement\n"); break;
-            case TokenType::GOTO: printf("Parsing GOTO statement\n"); break;
-            case TokenType::GOSUB: printf("Parsing GOSUB statement\n"); break;
-            
-            case TokenType::STRING_LITERAL: printf("Parsing STRING LITERAL: %s\n", tokens[i].value.c_str()); break;
-            case TokenType::DIGIT_LITERAL: printf("Parsing DIGIT LITERAL: %s\n", tokens[i].value.c_str()); break;
-            
-            case TokenType::IDENTIFIER: printf("Parsing IDENTIFIER: %s\n", tokens[i].value.c_str()); break;
-            
-            case TokenType::OPERATOR: printf("Parsing OPERATOR: %s\n", tokens[i].value.c_str()); break;
-
-            case TokenType::END_OF_FILE: printf("----END OF FILE----\n"); break;
-            case TokenType::INVALID: printf("Error: Invalid statement\n"); break;
-            
-            default: printf("Error: Unknown token type\n"); break;
-        }
-    }
-}
-
+//entry point
 int main() 
 {
-    //loads code
-    std::ifstream t("C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject/Main.cubasic");
-    t.seekg(0, std::ios::end);
-    size_t size = t.tellg();
-    std::string source(size, '\0');
-    t.seekg(0);
-    t.read(&source[0], size);
-    t.close();
+    //compiler settings
+    Cube::CompilerSettings compilerSettings;
+
+    compilerSettings.cubasicFiles.emplace_back("C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject/Main.cubasic");
+    compilerSettings.workingDir = "C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject";
+    compilerSettings.outputDir = "C:/Compilers/Cubasic-Toolchain/DemoForDevs/ASMTest";
+
+	//loads code
+	Cube::TranslationUnit translationUnit;
+	translationUnit.filepathIsRelative = false;
+	translationUnit.filepath = compilerSettings.cubasicFiles[0];
+	translationUnit.ReadSource();
 
     //lex tokens
-    std::vector<Token> tokens = tokenize(source.c_str());
-    PrintStatements(tokens);
-    tokens.clear();
+	translationUnit.tokens = Cube::Lex(translationUnit.cubasicSource.c_str());
+    Cube::Print(translationUnit.tokens);
+
+    //generate AST
+
+    //generate ASM backend
 
     getchar();
     return 0;

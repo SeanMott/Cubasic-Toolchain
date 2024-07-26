@@ -6,43 +6,64 @@
 
 namespace Cube::Keywords
 {
-	//defines keyword enums
-	enum class CubasicKeyword
-	{
-		STOP = 0,
-		INCLUDE,
-		FUNCTION,
-		END,
-		PRINT,
-		CALL,
-		RETURN,
-		INPUT,
-		IF, ELSE, THEN,
-		NEXT,
-		FOR, IN,
-		SET,
-		GOTO, GOSUB,
+    // Token types
+    enum class TokenType
+    {
+        INCLUDE = 0,
 
-		Count
-	};
+        PRINT,
 
-	//defines keyword strings
-	static const uint32_t CUBASIC_KEYWORD_STR_COUNT = (uint32_t)CubasicKeyword::Count;
-	static const char* CUBASIC_KEYWORD_STRS[CUBASIC_KEYWORD_STR_COUNT] = {"STOP", "INCLUDE", "FUNCTION", "END",
-	"PRINT", "CALL", "RETURN", "INPUT", "IF", "ELSE", "THEN", "NEXT", "FOR", "IN", "SET", "GOTO", "GOSUB"};
+        CALL,
+        INPUT,
 
-	//is the keyword
-	static inline bool IsCubasicKeyword(const char* str, CubasicKeyword& keyword)
-	{
-		for (uint32_t i = 0; i < CUBASIC_KEYWORD_STR_COUNT; ++i)
-		{
-			if (!strcmp(str, CUBASIC_KEYWORD_STRS[i]))
-			{
-				keyword = (CubasicKeyword)i;
-				return true;
-			}
-		}
+        IF,
+        ELSE,
 
-		return false;
-	}
+        GOTO,
+        GOSUB,
+
+        THEN,
+        NEXT,
+        FOR,
+        IN,
+
+        SET,
+
+        FUNCTION,
+
+        END,
+        RETURN,
+
+        STOP,
+
+        STRING_LITERAL,
+        DIGIT_LITERAL,
+        //HEX_LITERAL,
+
+        IDENTIFIER,
+
+        OPERATOR,
+
+        END_OF_FILE, INVALID
+    };
+
+    static TokenType keywordToTokenType(const char* value) {
+        static const struct {
+            const char* keyword;
+            TokenType type;
+        } keywords[] = {
+            {"STOP", TokenType::STOP}, {"INCLUDE", TokenType::INCLUDE}, {"FUNCTION", TokenType::FUNCTION},
+            {"END", TokenType::END}, {"PRINT", TokenType::PRINT}, {"CALL", TokenType::CALL}, {"RETURN", TokenType::RETURN},
+            {"INPUT", TokenType::INPUT}, {"IF", TokenType::IF}, {"ELSE", TokenType::ELSE}, {"THEN", TokenType::THEN},
+            {"NEXT", TokenType::NEXT}, {"FOR", TokenType::FOR}, {"IN", TokenType::IN}, {"SET", TokenType::SET},
+            {"GOTO", TokenType::GOTO}, {"GOSUB", TokenType::GOSUB}
+        };
+
+        for (size_t i = 0; i < sizeof(keywords) / sizeof(keywords[0]); ++i) {
+            if (strcmp(value, keywords[i].keyword) == 0) {
+                return keywords[i].type;
+            }
+        }
+        return TokenType::IDENTIFIER;
+    }
 }
