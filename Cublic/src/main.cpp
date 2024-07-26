@@ -2,6 +2,7 @@
 
 #include <Cublic/CompilerSettings.hpp>
 #include <Cublic/TranslationUnit.hpp>
+#include <Cublic/PASMBackend.hpp>
 
 #include <string>
 #include <iostream>
@@ -257,7 +258,7 @@ int main()
 
     compilerSettings.cubasicFiles.emplace_back("C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject/Main.cubasic");
     compilerSettings.workingDir = "C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject";
-    compilerSettings.outputDir = "C:/Compilers/Cubasic-Toolchain/DemoForDevs/ASMTest";
+    compilerSettings.outputDir = "C:/Compilers/Cubasic-Toolchain/DemoForDevs/TestProject/ASMTest";
 
 	//loads code
 	Cube::TranslationUnit translationUnit;
@@ -272,6 +273,10 @@ int main()
     //generate AST
 
     //generate ASM backend
+	translationUnit.PASMSource = Cube::Backend::PASM::GeneratePASM(translationUnit.tokens, compilerSettings);
+
+	//writes to file
+	translationUnit.WritePASMToFile(std::string(compilerSettings.outputDir + "/PASM.s").c_str());
 
     getchar();
     return 0;

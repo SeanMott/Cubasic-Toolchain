@@ -1,4 +1,4 @@
-#include <Cublic/Lex.hpp>
+#include <Cublic/Lexer.hpp>
 
 //skips a comment
 static void skipComment(const char* source, const size_t& sourceLength, size_t& charIndex) {

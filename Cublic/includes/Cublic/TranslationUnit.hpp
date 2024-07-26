@@ -2,7 +2,7 @@
 
 //defines a translation unit
 
-#include <Cublic/Lex.hpp>
+#include <Cublic/Lexer.hpp>
 
 #include <string>
 #include <fstream>
@@ -16,6 +16,7 @@ namespace Cube
 
 		std::string filepath = ""; //the filepath to the cubasic source
 		std::string cubasicSource = ""; //the cubasic source code
+		std::string PASMSource = ""; //the PASM source code
 
 		//the AST
 
@@ -34,6 +35,17 @@ namespace Cube
 			t.seekg(0);
 			t.read(&cubasicSource[0], size);
 			t.close();
+
+			return true;
+		}
+
+		//qrites the PASM source code
+		inline bool WritePASMToFile(const char* outputFilepath)
+		{
+			std::ofstream myfile;
+			myfile.open(outputFilepath);
+			myfile << PASMSource;
+			myfile.close();
 
 			return true;
 		}
