@@ -1,7 +1,7 @@
 //the compiler for making a "ROM" for the Cubeculator
 
-#include <Cublic/CompilerSettings.hpp>
-#include <Cublic/TranslationUnit.hpp>
+#include <Cublic/Compiler/CompilerSettings.hpp>
+#include <Cublic/Compiler/TranslationUnit.hpp>
 #include <Cublic/PASMBackend.hpp>
 
 #include <string>
@@ -268,12 +268,13 @@ int main()
 
     //lex tokens
 	translationUnit.tokens = Cube::Lex(translationUnit.cubasicSource.c_str());
-    Cube::Print(translationUnit.tokens);
+    //Cube::Print(translationUnit.tokens);
 
     //generate AST
+	std::vector<Cube::AST::ASTNode> AST = Cube::AST::GenerateASTFromTranslationUnit(translationUnit.tokens);
 
     //generate ASM backend
-	translationUnit.PASMSource = Cube::Backend::PASM::GeneratePASM(translationUnit.tokens, compilerSettings);
+	translationUnit.PASMSource = Cube::Backend::PASM::GeneratePASM(AST, compilerSettings);
 
 	//writes to file
 	translationUnit.WritePASMToFile(std::string(compilerSettings.outputDir + "/PASM.s").c_str());

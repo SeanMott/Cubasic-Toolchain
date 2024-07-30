@@ -2,7 +2,7 @@
 
 //defines a translation unit
 
-#include <Cublic/Lexer.hpp>
+#include <Cublic/Stages/Lexer.hpp>
 
 #include <string>
 #include <fstream>

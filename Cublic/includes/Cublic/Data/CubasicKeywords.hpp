@@ -44,6 +44,8 @@ namespace Cube::Keywords
 
         OPERATOR,
 
+        NEWLINE,
+
         END_OF_FILE, INVALID
     };
 

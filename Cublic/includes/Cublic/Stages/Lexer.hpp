@@ -2,7 +2,7 @@
 
 //defines a lexer for cubebasic
 
-#include <Cublic/CubasicKeywords.hpp>
+#include <Cublic/Data/CubasicKeywords.hpp>
 
 #include <vector>
 #include <string>

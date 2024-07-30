@@ -1,4 +1,4 @@
-#include <Cublic/Lexer.hpp>
+#include <Cublic/Stages/Lexer.hpp>
 
 //skips a comment
 static void skipComment(const char* source, const size_t& sourceLength, size_t& charIndex) {
@@ -73,6 +73,14 @@ std::vector<Cube::Token> Cube::Lex(const char* source)
 
     for (size_t c = 0; c < sourceLength; ++c)
     {
+        //if newline
+        if (source[c] == '\n')
+        {
+            Token* token = &tokens.emplace_back(Token());
+            token->type = Keywords::TokenType::NEWLINE;
+            continue;
+        }
+
         //if white space or tab
         if (isspace(source[c]) || source[c] == '\t')
             continue;
@@ -176,6 +184,7 @@ void Cube::Print(const std::vector<Cube::Token>& tokens)
         case Keywords::TokenType::IDENTIFIER: printf("Parsing IDENTIFIER: %s\n", tokens[i].value.c_str()); break;
 
         case Keywords::TokenType::OPERATOR: printf("Parsing OPERATOR: %s\n", tokens[i].value.c_str()); break;
+        case Keywords::TokenType::NEWLINE: printf("Parsing  NEWLINE\n"); break;
 
         case Keywords::TokenType::END_OF_FILE: printf("----END OF FILE----\n"); break;
         case Keywords::TokenType::INVALID: printf("Error: Invalid statement\n"); break;
