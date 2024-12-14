@@ -16,43 +16,39 @@ STB_GIT_REPO_URL = "https://github.com/nothings/stb.git"
 def GetIfNotThere(URL, outputDir, branch = "master"):
     if not os.path.exists(outputDir):
         Repo.clone_from(URL, outputDir, branch = branch)
-        #subprocess.run(["git", "clone", URL, outputDir],
-        #shell=True)
 
 #gets SDL 2
-GetIfNotThere(SDL_GIT_REPO_LINK, "Venders/SDL", branch = "SDL2")
+#GetIfNotThere(SDL_GIT_REPO_LINK, "Venders/SDL", branch = "SDL2")
 
 #builds SDL 2
-subprocess.run(["cmake", "-S", "Venders/SDL", "-B", "Venders/SDL/Build"],
-        shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
-        shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=MinSizeRel"],
-        shell=True)
-subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=RelWithDebInfo"],
-        shell=True)
+#subprocess.run(["cmake", "-S", "Venders/SDL", "-B", "Venders/SDL/Build"],
+#        shell=True)
+#subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
+#        shell=True)
+#subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=MinSizeRel"],
+#        shell=True)
+#subprocess.run(["msbuild", "Venders/SDL/Build/SDL2.sln", "-maxCpuCount:4", "/property:Configuration=RelWithDebInfo"],
+#        shell=True)
            
 #gets FMT
 GetIfNotThere(FMT_GIT_REPO_LINK, "Venders/FMT")
 
 #gets GLM
-GetIfNotThere(GLM_GIT_REPO_LINK, "Venders/GLM")
+#GetIfNotThere(GLM_GIT_REPO_LINK, "Venders/GLM")
 
 #gets STB
-GetIfNotThere(STB_GIT_REPO_URL, "Venders/STB")
-
-
+#GetIfNotThere(STB_GIT_REPO_URL, "Venders/STB")
 
 subprocess.run(["GenProject.bat"],
         shell=True)
 
 #performs test buillds
-subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Debug"],
-        shell=True)
-subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
-        shell=True)
-subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Dist"],
-        shell=True)
+#subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Debug"],
+#        shell=True)
+#subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Release"],
+#        shell=True)
+#subprocess.run(["msbuild", "CubasicToolchain.sln", "-maxCpuCount:4", "/property:Configuration=Dist"],
+#        shell=True)
 
 #moves SDL to the right folder
 
