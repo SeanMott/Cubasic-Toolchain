@@ -5,6 +5,10 @@ To create a simple yet modern programming language (Cubasic) for a retro-inspire
 
 ## Project Overview
 - [Design Doc](Docs/CubasicDesignDoc.md)
+- [Cubasic Language Instructions](Docs/CubasicLanguageInstructions.md)
+- [Cubix Core CPU](Docs/CubixCoreCPULimitations_Features.md)
+- [Cubix ROM Structure](Docs/Cubixcore_RomStructure.md)
+- [Cubix Core ASM Commands](Docs/CubixCoreAssemblyCommands.md)
 
 ## Building
 
