@@ -1,7 +1,12 @@
-# Cubasic-Toolchain
-A toolchain for using Cubasic and FCMAKE to output PASM
+# Cubasic Programming Language and CubixCore CPU Design Document
 
-# Building
+## Project Vision
+To create a simple yet modern programming language (Cubasic) for a retro-inspired virtual console (CubixCore). The goal is to blend the simplicity of retro systems like NES and Game Boy with modern programming conveniences such as named functions, function maps, and structured flow control. The system should be approachable for beginners while offering enough power for advanced users.
+
+## Project Overview
+- [Design Doc](Docs/CubasicDesignDoc.md)
+
+## Building
 
 ## Windows
 
