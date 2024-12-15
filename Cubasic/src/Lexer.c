@@ -14,7 +14,7 @@ const char* keywords[] = {
 };
 
 const char operators[] = "+-*/=<>";
-const char punctuation[] = "(),[]"; // Added '[' and ']'
+const char punctuation[] = "(),[]";
 
 // Initialize Lexer
 Lexer* init_lexer(const char* source) {
