@@ -6,39 +6,44 @@
 #include <ctype.h>
 #include <stddef.h>
 
+#include <stdbool.h>
+
 // Define token patterns
-const char* keywords[] = {
-    "FUNCTION", "PRINT", "DIM", "FOR", "IF", "ELSE", "ENDIF", "END", "CALL", "WHILE",
+const char* keywords[] = { "FUNCTION", "PRINT", "DIM", "FOR", "IF", "ELSE", "ENDIF", "END", "CALL", "WHILE",
     "BREAK", "CONTINUE", "GOTO", "RETURN", "HALT", "INPUT", "SET", "NEXT",
-    "SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW", NULL
-};
+    "SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW", NULL };
 
 const char operators[] = "+-*/=<>";
 const char punctuation[] = "(),[]";
 
 // Initialize Lexer
-Lexer* init_lexer(const char* source) {
+Lexer* init_lexer(CodeFile* code)
+{
     Lexer* lexer = (Lexer*)malloc(sizeof(Lexer));
-    lexer->source = source;
+    
     lexer->position = 0;
     lexer->line = 1;
     lexer->column = 1;
-    lexer->sourceLength = strlen(source);
+
+    lexer->codeFile = code;
+
     return lexer;
 }
 
 // Check if a string is a keyword
-int is_keyword(const char* str) {
-    for (int i = 0; keywords[i] != NULL; i++) {
-        if (strcmp(str, keywords[i]) == 0) {
-            return 1;
-        }
+bool is_keyword(const char* str)
+{
+    for (int i = 0; keywords[i] != NULL; i++)
+    {
+        if (!strcmp(str, keywords[i]))
+            return true;
     }
-    return 0;
+    return false;
 }
 
 // Create a new token
-Token* create_token(TokenType type, const char* value, int line, int column) {
+Token* create_token(TokenType type, const char* value, int line, int column)
+{
     Token* token = (Token*)malloc(sizeof(Token));
     token->type = type;
     token->value = _strdup(value);
@@ -48,26 +53,27 @@ Token* create_token(TokenType type, const char* value, int line, int column) {
 }
 
 // Free a token
-void free_token(Token* token) {
+void free_token(Token* token)
+{
     free(token->value);
     free(token);
 }
 
 // Error handling function
-void handle_error(Lexer* lexer, const char* message) {
+void handle_error(Lexer* lexer, const char* message)
+{
     fprintf(stderr, "Error at line %d, column %d: %s\n", lexer->line, lexer->column, message);
     free_lexer(lexer);  // Ensure cleanup
     exit(EXIT_FAILURE); // Optional, for critical failures
 }
 
 // Advance the lexer by one character
-char lexerAdvance(Lexer* lexer) {
-    //lexer->position++;
-    
-    if (lexer->position >= lexer->sourceLength)
+char lexerAdvance(Lexer* lexer)
+{
+    if (lexer->position >= lexer->codeFile->codeLength)
         return EOF;
     
-    char current = lexer->source[lexer->position];
+    char current = lexer->codeFile->code[lexer->position];
     lexer->position++;
     lexer->column++;
     if (current == '\n') {
@@ -79,15 +85,15 @@ char lexerAdvance(Lexer* lexer) {
 
 // Peek at the next character without consuming it
 char peek(Lexer* lexer) {
-    if (lexer->position >= lexer->sourceLength)
+    if (lexer->position >= lexer->codeFile->codeLength)
         return EOF;
 
-    return lexer->source[lexer->position];
+    return lexer->codeFile->code[lexer->position];
 }
 
 // Skip whitespace and comments
 void skip_whitespace_and_comments(Lexer* lexer) {
-    while (isspace((unsigned char)peek(lexer)) || (peek(lexer) == '/' && lexer->source[lexer->position + 1] == '/')) {
+    while (isspace((unsigned char)peek(lexer)) || (peek(lexer) == '/' && lexer->codeFile->code[lexer->position + 1] == '/')) {
         if (peek(lexer) == '/') {
             while (peek(lexer) != '\n' && peek(lexer) != '\0') {
                 lexerAdvance(lexer);
@@ -106,7 +112,7 @@ Token* get_next_token(Lexer* lexer) {
     char current = peek(lexer);
     if (current == '\0' || current == EOF) {
         // Ensure EOF token is emitted only once
-       // if (lexer->position > strlen(lexer->source)) {
+       // if (lexer->position > strlen(lexer->codeFile->code)) {
             return create_token(TOKEN_EOF, "", lexer->line, lexer->column);
         //}
     }
@@ -119,7 +125,7 @@ Token* get_next_token(Lexer* lexer) {
             lexerAdvance(lexer);
         }
         char* value = (char*)malloc(lexer->position - start + 1);
-        strncpy_s(value, lexer->position - start + 1, lexer->source + start, lexer->position - start);
+        strncpy_s(value, lexer->position - start + 1, lexer->codeFile->code + start, lexer->position - start);
         value[lexer->position - start] = '\0';
         TokenType type = is_keyword(value) ? TOKEN_KEYWORD : TOKEN_IDENTIFIER;
         return create_token(type, value, lexer->line, start_column);
@@ -133,7 +139,7 @@ Token* get_next_token(Lexer* lexer) {
             lexerAdvance(lexer);
         }
         char* value = (char*)malloc(lexer->position - start + 1);
-        strncpy_s(value, lexer->position - start + 1, lexer->source + start, lexer->position - start);
+        strncpy_s(value, lexer->position - start + 1, lexer->codeFile->code + start, lexer->position - start);
         value[lexer->position - start] = '\0';
         return create_token(TOKEN_LITERAL, value, lexer->line, start_column);
     }
@@ -153,7 +159,7 @@ Token* get_next_token(Lexer* lexer) {
             handle_error(lexer, "Unterminated string literal");
         }
         char* value = (char*)malloc(lexer->position - start);
-        strncpy_s(value, lexer->position - start + 1, lexer->source + start, lexer->position - start);
+        strncpy_s(value, lexer->position - start + 1, lexer->codeFile->code + start, lexer->position - start);
         value[lexer->position - start - 1] = '\0';
         return create_token(TOKEN_STRING, value, lexer->line, start_column);
     }
