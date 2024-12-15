@@ -6,18 +6,12 @@ Cubasic compiler
 #include <Cubasic/Parser.h>
 #include <Cubasic/SemanticAnalysis.h>
 
+#include <Cubasic/TranslationUnit.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
-//displays the tokens
-static inline void display_tokens(Token** tokens, int token_count)
-{
-    printf("Tokens:\n");
-    for (int i = 0; i < token_count; i++)
-        PrintToken(tokens[i]);
-}
 
 //displays the AST
 static inline void display_ast(ASTNode* node, int depth) 
@@ -41,40 +35,37 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    //compiler tags
-    bool printTokens = (argc > 2 && !strcmp(argv[2], "--tokens")),
+    //compiler flags
+    const bool printTokens = (argc > 2 && !strcmp(argv[2], "--tokens")),
         printAST = (argc > 2 && !strcmp(argv[2], "--ast")),
         printSymbolTable = !(argc > 2 && strcmp(argv[2], "--symbols"));
 
     //loads the code
-    CodeFile code;
+    CodeFile code; code.code = NULL; code.codeLength = 0;
     if(!LoadFile(argv[1], &code))
         return EXIT_FAILURE;
 
-    //parse tokens
+    //parse code into Tokens
     Lexer* lexer = init_lexer(&code);
-    Token* token;
-    Token** tokens = NULL;
-    int token_count = 0;
+    TranslationUnit translationUnit; translationUnit.tokens = NULL; translationUnit.tokenCount = 0;
     do {
-        token = get_next_token(lexer);
-        tokens = (Token**)realloc(tokens, sizeof(Token*) * (token_count + 1));
-        tokens[token_count++] = token;
-        PrintToken(token);
+        Token* t = AddToken(&translationUnit, get_next_token(lexer));
+        PrintToken(t);
 
         //break or unrecognized
-        if (token->type == TOKEN_EOF || token->type == TOKEN_ERROR)
+        if (t->type == TOKEN_EOF || t->type == TOKEN_ERROR)
             break;
 
-    } while (token->type != TOKEN_EOF);
-
-    if (printTokens)
-        display_tokens(tokens, token_count);
+    } while (GetLatestToken(&translationUnit)->type != TOKEN_EOF);
 
     //generate AST
-    Parser* parser = init_parser(tokens, token_count);
+    Parser* parser = init_parser(translationUnit.tokens, translationUnit.tokenCount);
     ASTNode* ast_root = parse_program(parser);
     validate_ast(ast_root, 0);
+
+    //clean up tokens
+    DestroyTranslationUnit(&translationUnit);
+    free_lexer(lexer);
 
     if (printAST)
     {
@@ -88,12 +79,10 @@ int main(int argc, char* argv[])
         print_symbol_table();
     }
 
-    // Cleanup
-    for (int i = 0; i < token_count; i++)
-        free_token(tokens[i]);
-    free(tokens);
-    free_lexer(lexer);
+    //clean up AST
     free_ast_node(ast_root);
+
+    //clean up Symbol Table
     free_symbol_table();
     
     //unloads code

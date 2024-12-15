@@ -8,10 +8,11 @@
 
 #include <stdbool.h>
 
-// Define token patterns
-const char* keywords[] = { "FUNCTION", "PRINT", "DIM", "FOR", "IF", "ELSE", "ENDIF", "END", "CALL", "WHILE",
+//Keywords
+#define CUBASIC_TOKEN_KEYWORD_STRS_COUNT 24
+const char* keywords[CUBASIC_TOKEN_KEYWORD_STRS_COUNT] = { "FUNCTION", "PRINT", "DIM", "FOR", "IF", "ELSE", "ENDIF", "END", "CALL", "WHILE",
     "BREAK", "CONTINUE", "GOTO", "RETURN", "HALT", "INPUT", "SET", "NEXT",
-    "SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW", NULL };
+    "SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW"};
 
 const char operators[] = "+-*/=<>";
 const char punctuation[] = "(),[]";
@@ -33,7 +34,7 @@ Lexer* init_lexer(CodeFile* code)
 // Check if a string is a keyword
 bool is_keyword(const char* str)
 {
-    for (int i = 0; keywords[i] != NULL; i++)
+    for (int i = 0; keywords[i] < CUBASIC_TOKEN_KEYWORD_STRS_COUNT; i++)
     {
         if (!strcmp(str, keywords[i]))
             return true;
