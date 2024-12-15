@@ -110,12 +110,10 @@ Token* get_next_token(Lexer* lexer) {
     skip_whitespace_and_comments(lexer);
 
     char current = peek(lexer);
-    if (current == '\0' || current == EOF) {
-        // Ensure EOF token is emitted only once
-       // if (lexer->position > strlen(lexer->codeFile->code)) {
-            return create_token(TOKEN_EOF, "", lexer->line, lexer->column);
-        //}
-    }
+
+    //end of token
+    if (current == '\0' || current == EOF)
+        return create_token(TOKEN_EOF, "", lexer->line, lexer->column);
 
     // Keywords and Identifiers
     if (isalpha((unsigned char)current) || current == '_') {
