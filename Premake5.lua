@@ -1,6 +1,6 @@
 workspace "CubasicToolchain"
 architecture "x64"
-startproject "Cubasix"
+startproject "Cubasic"
 
 configurations
 {
@@ -17,8 +17,8 @@ VENDER_INCLUDE_FMT = "Venders/FMT/includes"
 --library that defines the Cubix Core ASM for parsing
 
 --compiler for turing Cubasic to Cubix Core ASM
-project "Cubasix"
-location "Cubasix"
+project "Cubasic"
+location "Cubasic"
 kind "ConsoleApp"
 language "C++"
 
@@ -29,15 +29,15 @@ objdir ("bin-obj/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}-%{cfg.startpr
 files 
 {
     ---base code
-    "Cubasix/includes/**.h",
-    "Cubasix/src/**.c",
-    "Cubasix/includes/**.hpp",
-    "Cubasix/src/**.cpp"
+    "Cubasic/includes/**.h",
+    "Cubasic/src/**.c",
+    "Cubasic/includes/**.hpp",
+    "Cubasic/src/**.cpp"
 }
 
 includedirs
 {
-    "Cubasix/includes",
+    "Cubasic/includes",
 
     VENDER_INCLUDE_FMT,
 }
