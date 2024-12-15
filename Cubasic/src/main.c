@@ -76,19 +76,24 @@ static inline void UnloadFile(CodeFile* code)
 //entry point
 int main(int argc, char* argv[])
 {
-    //prints the arguments
+    //prints the arguments and how to use
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s <source_file> [--tokens] [--ast] [--symbols]\n", argv[0]);
         return EXIT_FAILURE;
     }
 
+    //compiler tags
+    bool printTokens = (argc > 2 && !strcmp(argv[2], "--tokens")),
+        printAST = (argc > 2 && !strcmp(argv[2], "--ast")),
+        printSymbolTable = !(argc > 2 && strcmp(argv[2], "--symbols"));
+
     //loads the code
     CodeFile code;
     if(!LoadFile(argv[1], &code))
         return EXIT_FAILURE;
 
-    // Lexical analysis
+    //parse tokens
     Lexer* lexer = init_lexer(code.code);
     Token* token;
     Token** tokens = NULL;
@@ -97,25 +102,31 @@ int main(int argc, char* argv[])
         token = get_next_token(lexer);
         tokens = (Token**)realloc(tokens, sizeof(Token*) * (token_count + 1));
         tokens[token_count++] = token;
+        printf("Type: %d, Value: '%s', Line: %d, Column: %d\n",
+            token->type, token->value, token->line, token->column);
+
+        //break or unrecognized
+        if (token->type == TOKEN_EOF || token->type == TOKEN_ERROR)
+            break;
+
     } while (token->type != TOKEN_EOF);
 
-    if (argc > 2 && strcmp(argv[2], "--tokens") == 0) {
+    if (printTokens)
         display_tokens(tokens, token_count);
-    }
 
-    // Parsing
+    //generate AST
     Parser* parser = init_parser(tokens, token_count);
     ASTNode* ast_root = parse_program(parser);
+    validate_ast(ast_root, 0);
 
-    if (argc > 2 && strcmp(argv[2], "--ast") == 0) {
+    if (printAST)
+    {
         printf("AST:\n");
         display_ast(ast_root, 0);
     }
 
-    // Semantic analysis
-    validate_ast(ast_root, 0);
-
-    if (argc > 2 && strcmp(argv[2], "--symbols") == 0) {
+    if (printSymbolTable)
+    {
         printf("Symbol Table:\n");
         print_symbol_table();
     }

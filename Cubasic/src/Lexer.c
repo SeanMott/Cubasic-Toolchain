@@ -62,6 +62,8 @@ void handle_error(Lexer* lexer, const char* message) {
 
 // Advance the lexer by one character
 char lexerAdvance(Lexer* lexer) {
+    //lexer->position++;
+    
     if (lexer->position >= lexer->sourceLength)
         return EOF;
     
@@ -171,8 +173,10 @@ Token* get_next_token(Lexer* lexer) {
     }
 
     // Unrecognized Token
-    handle_error(lexer, "Unrecognized token encountered");
-    return NULL; // Will not reach here due to exit in handle_error
+   // handle_error(lexer, "Unrecognized token encountered");
+   // return NULL; // Will not reach here due to exit in handle_error
+    char value[2] = { current, '\0' };
+    return create_token(TOKEN_ERROR, value, lexer->line, lexer->column - 1);
 }
 
 // Free the lexer

@@ -16,7 +16,8 @@ typedef enum {
     TOKEN_PUNCTUATION,
     TOKEN_COMMENT,
     TOKEN_EOF,
-    TOKEN_EXPRESSION
+    TOKEN_EXPRESSION,
+    TOKEN_ERROR
 } TokenType;
 
 // Token structure
