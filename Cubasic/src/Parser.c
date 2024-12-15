@@ -14,32 +14,31 @@ void handle_parser_error(Parser* parser, const char* message) {
 
 // Utility: Get the current token
 Token* current_token(Parser* parser) {
-    if (parser->current_token < parser->token_count) {
-        return parser->tokens[parser->current_token];
+    if (parser->current_token < parser->translationUnit->tokenCount) {
+        return parser->translationUnit->tokens[parser->current_token];
     }
     return NULL;
 }
 
 // Utility: Peek at the next token
 Token* peek_next_token(Parser* parser) {
-    if (parser->current_token + 1 < parser->token_count) {
-        return parser->tokens[parser->current_token + 1];
+    if (parser->current_token + 1 < parser->translationUnit->tokenCount) {
+        return parser->translationUnit->tokens[parser->current_token + 1];
     }
     return NULL;
 }
 
 // Utility: Advance to the next token
 void parserAdvance(Parser* parser) {
-    if (parser->current_token < parser->token_count) {
+    if (parser->current_token < parser->translationUnit->tokenCount) {
         parser->current_token++;
     }
 }
 
 // Initialize the parser
-Parser* init_parser(Token** tokens, int token_count) {
+Parser* init_parser(TranslationUnit* translationUnit) {
     Parser* parser = (Parser*)malloc(sizeof(Parser));
-    parser->tokens = tokens;
-    parser->token_count = token_count;
+    parser->translationUnit = translationUnit;
     parser->current_token = 0;
     return parser;
 }

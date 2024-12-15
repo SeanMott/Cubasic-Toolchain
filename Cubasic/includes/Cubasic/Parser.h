@@ -1,7 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <Cubasic/Lexer.h>
+#include <Cubasic/TranslationUnit.h>
 
 // AST Node Types
 typedef enum {
@@ -28,14 +28,15 @@ typedef struct ASTNode {
 } ASTNode;
 
 // Parser State
-typedef struct Parser {
-    Token** tokens;
-    int token_count;
+typedef struct Parser
+{
     int current_token;
+
+    TranslationUnit* translationUnit;
 } Parser;
 
 // Function Declarations
-Parser* init_parser(Token** tokens, int token_count);
+Parser* init_parser(TranslationUnit* translationUnit);
 void free_parser(Parser* parser);
 ASTNode* create_ast_node(ASTNodeType type, const char* value);
 void add_child(ASTNode* parent, ASTNode* child);

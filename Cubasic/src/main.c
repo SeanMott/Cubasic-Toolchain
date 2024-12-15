@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
     } while (GetLatestToken(&translationUnit)->type != TOKEN_EOF);
 
     //generate AST
-    Parser* parser = init_parser(translationUnit.tokens, translationUnit.tokenCount);
+    Parser* parser = init_parser(&translationUnit);
     ASTNode* ast_root = parse_program(parser);
     validate_ast(ast_root, 0);
 

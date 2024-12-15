@@ -4,6 +4,8 @@
 
 #include <Cubasic/Frontend/Token.hpp>
 
+#include <stdlib.h>
+
 //defines the translation unit
 //each code file is a translation unit
 typedef struct TranslationUnit {
