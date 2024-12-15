@@ -16,11 +16,7 @@ static inline void display_tokens(Token** tokens, int token_count)
 {
     printf("Tokens:\n");
     for (int i = 0; i < token_count; i++)
-    {
-        Token* token = tokens[i];
-        printf("Type: %d, Value: '%s', Line: %d, Column: %d\n",
-            token->type, token->value, token->line, token->column);
-    }
+        PrintToken(tokens[i]);
 }
 
 //displays the AST
@@ -34,8 +30,6 @@ static inline void display_ast(ASTNode* node, int depth)
     for (int i = 0; i < node->child_count; i++)
         display_ast(node->children[i], depth + 1);
 }
-
-
 
 //entry point
 int main(int argc, char* argv[])
@@ -66,8 +60,7 @@ int main(int argc, char* argv[])
         token = get_next_token(lexer);
         tokens = (Token**)realloc(tokens, sizeof(Token*) * (token_count + 1));
         tokens[token_count++] = token;
-        printf("Type: %d, Value: '%s', Line: %d, Column: %d\n",
-            token->type, token->value, token->line, token->column);
+        PrintToken(token);
 
         //break or unrecognized
         if (token->type == TOKEN_EOF || token->type == TOKEN_ERROR)

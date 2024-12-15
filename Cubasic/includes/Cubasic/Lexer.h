@@ -8,27 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 
-// Define token types
-typedef enum {
-    TOKEN_KEYWORD,
-    TOKEN_IDENTIFIER,
-    TOKEN_OPERATOR,
-    TOKEN_LITERAL,
-    TOKEN_STRING,
-    TOKEN_PUNCTUATION,
-    TOKEN_COMMENT,
-    TOKEN_EOF,
-    TOKEN_EXPRESSION,
-    TOKEN_ERROR
-} TokenType;
-
-// Token structure
-typedef struct {
-    TokenType type;
-    char* value;
-    int line;
-    int column;
-} Token;
+#include <Cubasic/Frontend/Token.hpp>
 
 // Lexer State
 typedef struct {
