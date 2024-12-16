@@ -2,31 +2,31 @@
 Cubasic compiler
 */
 
-#include <Cubasic/Lexer.hpp>
-#include <Cubasic/Parser.hpp>
-#include <Cubasic/SemanticAnalysis.hpp>
-
-#include <Cubasic/TranslationUnit.hpp>
-
-#include <Cubasic/Frontend/Token.hpp>
-#include <Cubasic/Frontend/AST.hpp>
+//#include <Cubasic/Lexer.hpp>
+//#include <Cubasic/Parser.hpp>
+//#include <Cubasic/SemanticAnalysis.hpp>
+//
+//#include <Cubasic/TranslationUnit.hpp>
+//
+//#include <Cubasic/Frontend/Token.hpp>
+//#include <Cubasic/Frontend/AST.hpp>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
-//displays the AST
-static inline void display_ast(ASTNode* node, int depth)
-{
-    for (int i = 0; i < depth; i++)
-        printf("  ");
-
-    printf("Node Type: %d, Value: '%s'\n", node->type, node->value ? node->value : "NULL");
-
-    for (int i = 0; i < node->child_count; i++)
-        display_ast(node->children[i], depth + 1);
-}
+//
+////displays the AST
+//static inline void display_ast(ASTNode* node, int depth)
+//{
+//    for (int i = 0; i < depth; i++)
+//        printf("  ");
+//
+//    printf("Node Type: %d, Value: '%s'\n", node->type, node->value ? node->value : "NULL");
+//
+//    for (int i = 0; i < node->child_count; i++)
+//        display_ast(node->children[i], depth + 1);
+//}
 
 //entry point
 int main(int argc, char* argv[])
@@ -43,53 +43,53 @@ int main(int argc, char* argv[])
         printAST = (argc > 2 && !strcmp(argv[2], "--ast")),
         printSymbolTable = !(argc > 2 && strcmp(argv[2], "--symbols"));
 
-    //loads the code
-    CodeFile code;
-    if(!code.LoadFile(argv[1]))
-        return EXIT_FAILURE;
+    ////loads the code
+    //CodeFile code;
+    //if(!code.LoadFile(argv[1]))
+    //    return EXIT_FAILURE;
 
-    //parse code into Tokens
-    Lexer* lexer = init_lexer(&code);
-    TranslationUnit translationUnit;
-    do {
-        Token* t = translationUnit.AddToken(*get_next_token(lexer));
-        PrintToken(t);
+    ////parse code into Tokens
+    //Lexer* lexer = init_lexer(&code);
+    //TranslationUnit translationUnit;
+    //do {
+    //    Token* t = translationUnit.AddToken(*get_next_token(lexer));
+    //    PrintToken(t);
 
-        //break or unrecognized
-        if (t->type == TokenType::TOKEN_EOF || t->type == TokenType::TOKEN_ERROR)
-            break;
+    //    //break or unrecognized
+    //    if (t->type == TokenType::TOKEN_EOF || t->type == TokenType::TOKEN_ERROR)
+    //        break;
 
-    } while (translationUnit.GetLatestToken()->type != TokenType::TOKEN_EOF);
+    //} while (translationUnit.GetLatestToken()->type != TokenType::TOKEN_EOF);
 
-    //unloads code
-    code.UnloadFile();
+    ////unloads code
+    //code.UnloadFile();
 
-    //generate AST
-    Parser* parser = init_parser(&translationUnit);
-    ASTNode* ast_root = ASTTree_GenerateASTTree(parser);
-    validate_ast(ast_root, 0);
+    ////generate AST
+    //Parser* parser = init_parser(&translationUnit);
+    //ASTNode* ast_root = ASTTree_GenerateASTTree(parser);
+    //validate_ast(ast_root, 0);
 
-    //clean up tokens
-    translationUnit.Destroy();
-    free_lexer(lexer);
+    ////clean up tokens
+    //translationUnit.Destroy();
+    //free_lexer(lexer);
 
-    if (printAST)
-    {
-        printf("AST:\n");
-        display_ast(ast_root, 0);
-    }
+    //if (printAST)
+    //{
+    //    printf("AST:\n");
+    //    display_ast(ast_root, 0);
+    //}
 
-    if (printSymbolTable)
-    {
-        printf("Symbol Table:\n");
-        print_symbol_table();
-    }
+    //if (printSymbolTable)
+    //{
+    //    printf("Symbol Table:\n");
+    //    print_symbol_table();
+    //}
 
-    //clean up AST
-    free_ast_node(ast_root);
+    ////clean up AST
+    //free_ast_node(ast_root);
 
-    //clean up Symbol Table
-    free_symbol_table();
+    ////clean up Symbol Table
+    //free_symbol_table();
 
     return EXIT_SUCCESS;
 }

@@ -10,7 +10,7 @@ configurations
 }
 
 --fmt vendor
-VENDER_INCLUDE_FMT = "Venders/FMT/includes"
+VENDER_INCLUDE_FMT = "Venders/FMT/include"
 
 --library that defines the Cubasic Language and parsing
 
