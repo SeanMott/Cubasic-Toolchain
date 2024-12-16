@@ -11,10 +11,7 @@ Cubasic compiler
 //#include <Cubasic/Frontend/Token.hpp>
 //#include <Cubasic/Frontend/AST.hpp>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
+#include <Cubasic/Util/TranslationUnit.hpp>
 //
 ////displays the AST
 //static inline void display_ast(ASTNode* node, int depth)
@@ -32,18 +29,24 @@ Cubasic compiler
 int main(int argc, char* argv[])
 {
     //prints the arguments and how to use
-    if (argc < 2)
-    {
-        fprintf(stderr, "Usage: %s <source_file> [--tokens] [--ast] [--symbols]\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+    //if (argc < 2)
+    //{
+    //    fprintf(stderr, "Usage: %s <source_file> [--tokens] [--ast] [--symbols]\n", argv[0]);
+    //    return EXIT_FAILURE;
+    //}
 
     //compiler flags
     const bool printTokens = (argc > 2 && !strcmp(argv[2], "--tokens")),
         printAST = (argc > 2 && !strcmp(argv[2], "--ast")),
         printSymbolTable = !(argc > 2 && strcmp(argv[2], "--symbols"));
 
-    ////loads the code
+    //loads the code
+    Cubasic::Util::TranslationUnit translationUnit;
+    translationUnit.LoadRawCode("C:/Compilers/Cubasic2/Cubasic-Toolchain/simple.cbs");
+
+    //lexes the code
+    //std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens
+
     //CodeFile code;
     //if(!code.LoadFile(argv[1]))
     //    return EXIT_FAILURE;
@@ -91,5 +94,6 @@ int main(int argc, char* argv[])
     ////clean up Symbol Table
     //free_symbol_table();
 
+    getchar();
     return EXIT_SUCCESS;
 }
