@@ -71,6 +71,14 @@ namespace Cubasic::Token
 				fmt::print(fmt::emphasis::bold | fg(fmt::color::brown), "Digit Literal || Line: {}, Char: {}, Digit: {}\n", line, charIndex, data);
 				return;
 
+			case TokenType::Operator:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::coral), "Operator || Line: {}, Char: {}, Operator: {}\n", line, charIndex, data);
+				return;
+
+			case TokenType::Keyword:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::dark_green), "Keyword || Line: {}, Char: {}, Keyword: {}\n", line, charIndex, data);
+				return;
+
 			case TokenType::Newline:
 				fmt::print(fmt::emphasis::bold | fg(fmt::color::orange), "Newline || Line: {}, Char: {}\n", line, charIndex);
 				return;

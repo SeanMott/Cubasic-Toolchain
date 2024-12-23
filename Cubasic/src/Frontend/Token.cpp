@@ -99,13 +99,87 @@ static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& 
 	return t;
 }
 
+//generates a keyword token
+static inline Cubasic::Token::Token GenerateToken_Keyword(const std::string& word)
+{
+	Cubasic::Token::Token t;
+	t.type = Cubasic::Token::TokenType::Keyword;
+	t.sourceIndex = currentSourceIndex;
+	t.charIndex = charCount;
+	t.line = lineCount;
+	t.data = word;
+	return t;
+}
+
+//generates a operator token
+static inline Cubasic::Token::Token GenerateToken_Operator(const char op)
+{
+	Cubasic::Token::Token t;
+	t.type = Cubasic::Token::TokenType::Operator;
+	t.sourceIndex = currentSourceIndex;
+	t.charIndex = charCount;
+	t.line = lineCount;
+	t.data = op;
+	return t;
+}
+
+//keyword count
+static const uint8_t KEYWORD_STRS_COUNT = 28;
+
+//defines a keyword
+static const char* KEYWORD_STRS[KEYWORD_STRS_COUNT] = {
+	"FUNCTION", "PRINT", "DIM", "FOR", "IF", "ELSE", "ENDIF", "END", "CALL", "WHILE",
+	"BREAK", "CONTINUE", "GOTO", "RETURN", "HALT", "INPUT", "SET", "NEXT",
+	"SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW", "IN", "THEN", "TO", "arr"
+};
+
+//checks for keyword
+static inline bool IsCubasicKeyword(const char* str)
+{
+	for (size_t i = 0; i < KEYWORD_STRS_COUNT; ++i)
+	{
+		if (!strcmp(str, KEYWORD_STRS[i]))
+			return true;
+	}
+
+	return false;
+}
+
+//operator count
+static const uint8_t OPERATOR_STRS_COUNT = 8;
+
+//defines operators
+static const char* OPERATOR_STRS[OPERATOR_STRS_COUNT] = {
+	"[", "]", "(", ")", "<", ">", "=", "*"
+};
+
+//checks for a operator
+static inline bool IsCubasicOperator(const char str)
+{
+	for (size_t i = 0; i < OPERATOR_STRS_COUNT; ++i)
+	{
+		if (!strcmp(&str, OPERATOR_STRS[i]))
+			return true;
+	}
+
+	return false;
+}
+
 //parses the word data
 static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Token::Token>* tokens)
 {
 	//takes whatever word data exists and parse it
 	if (wordData != "")
 	{
-		tokens->emplace_back(GenerateToken_Identifier(wordData));
+		//if the word is a keyword
+		if(IsCubasicKeyword(wordData.c_str()))
+			tokens->emplace_back(GenerateToken_Keyword(wordData));
+
+		//otherwise make a identifier
+		else
+			tokens->emplace_back(GenerateToken_Identifier(wordData));
+		
+		
 		wordData = "";
 	}
 }
@@ -157,6 +231,16 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 
 			//generates a digit token
 			tokens.emplace_back(GenerateToken_DigitLiteral(GetCurrentChar()));
+		}
+
+		//if it's a operator
+		else if (IsCubasicOperator(GetCurrentChar()))
+		{
+			//takes whatever word data exists and parse it
+			ParseWordData(wordData, &tokens);
+
+			//generates a operator token
+			tokens.emplace_back(GenerateToken_Operator(GetCurrentChar()));
 		}
 
 		//skip white space or mark new line
