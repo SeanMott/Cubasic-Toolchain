@@ -48,6 +48,9 @@ int main(int argc, char* argv[])
 
     //lexes the code
     std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens(translationUnit.rawCode);
+    fmt::print("\n\n---TOKENS---\n\n");
+    for (size_t t = 0; t < tokens.size(); ++t)
+        tokens[t].Print();
 
     //CodeFile code;
     //if(!code.LoadFile(argv[1]))

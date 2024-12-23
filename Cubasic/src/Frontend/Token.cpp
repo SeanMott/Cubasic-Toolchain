@@ -1,7 +1,5 @@
 #include <Cubasic/Frontend/Token.hpp>
 
-#include <Cubasic/Util/Logger.hpp>
-
 std::string code = "";
 size_t currentSourceIndex = 0, //the current token index
 codeLength = 0, //the code length
@@ -54,6 +52,18 @@ static inline Cubasic::Token::Token GenerateToken_NewLine()
 	return t;
 }
 
+//generates a identifier token
+static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& word)
+{
+	Cubasic::Token::Token t;
+	t.type = Cubasic::Token::TokenType::Identifier;
+	t.sourceIndex = currentSourceIndex;
+	t.charIndex = charCount;
+	t.line = lineCount;
+	t.data = word;
+	return t;
+}
+
 //lexes code into tokens
 std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::string& rawCode)
 {
@@ -64,20 +74,21 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 	std::string wordData = "";
 	while (currentSourceIndex < codeLength)
 	{
-		//skip white space
-		if (GetCurrentChar() == ' ')
+		//skip white space or mark new line
+		if (GetCurrentChar() == ' ' || GetCurrentChar() == '\n')
 		{
 			//takes whatever word data exists and parse it
+			if (wordData != "")
+			{
+				tokens.emplace_back(GenerateToken_Identifier(wordData));
+				wordData = "";
+			}
+
+			//if new line, generate a new line tokne
+			if (GetCurrentChar() == '\n')
+				tokens.emplace_back(GenerateToken_NewLine());
 
 			//fmt::print(" ");
-			//GetNextChar();
-			//continue;
-		}
-
-		//if new line, generates a new line token
-		if (GetCurrentChar() == '\n')
-		{
-			tokens.emplace_back(GenerateToken_NewLine());
 			//GetNextChar();
 			//continue;
 		}

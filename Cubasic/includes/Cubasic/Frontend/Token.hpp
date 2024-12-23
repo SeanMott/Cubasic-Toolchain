@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <Cubasic/Util/Logger.hpp>
+
 namespace Cubasic::Token
 {
 	//defines the keyword count
@@ -57,6 +59,21 @@ namespace Cubasic::Token
 		TokenType type = TokenType::Count;
 		size_t line = 0, charIndex = 0, sourceIndex = 0;
 		std::string data = "";
+
+		//prints a token
+		inline void Print()
+		{
+			switch (type)
+			{
+			case TokenType::Identifier:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::blue), "Identifier || Line: {}, Char: {}, Data: {}\n", line, charIndex, data);
+				return;
+
+			case TokenType::Newline:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::orange), "Newline || Line: {}, Char: {}\n", line, charIndex);
+				return;
+			}
+		}
 	};
 
 	//lexes source code into tokens
