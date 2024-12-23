@@ -67,6 +67,10 @@ namespace Cubasic::Token
 				fmt::print(fmt::emphasis::bold | fg(fmt::color::blanched_almond), "String Literal || Line: {}, Char: {}, String: {}\n", line, charIndex, data);
 				return;
 
+			case TokenType::DigitLiteral:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::brown), "Digit Literal || Line: {}, Char: {}, Digit: {}\n", line, charIndex, data);
+				return;
+
 			case TokenType::Newline:
 				fmt::print(fmt::emphasis::bold | fg(fmt::color::orange), "Newline || Line: {}, Char: {}\n", line, charIndex);
 				return;

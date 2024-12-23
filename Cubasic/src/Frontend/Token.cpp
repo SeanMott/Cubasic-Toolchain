@@ -75,6 +75,18 @@ static inline Cubasic::Token::Token GenerateToken_StringLiteral(const std::strin
 	return t;
 }
 
+//generates a digit literal token
+static inline Cubasic::Token::Token GenerateToken_DigitLiteral(const char num)
+{
+	Cubasic::Token::Token t;
+	t.type = Cubasic::Token::TokenType::DigitLiteral;
+	t.sourceIndex = currentSourceIndex;
+	t.charIndex = charCount;
+	t.line = lineCount;
+	t.data = num;
+	return t;
+}
+
 //generates a identifier token
 static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& word)
 {
@@ -137,8 +149,18 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 			wordData = "";
 		}
 
+		//if it's a digit literal
+		else if (isdigit(GetCurrentChar()))
+		{
+			//takes whatever word data exists and parse it
+			ParseWordData(wordData, &tokens);
+
+			//generates a digit token
+			tokens.emplace_back(GenerateToken_DigitLiteral(GetCurrentChar()));
+		}
+
 		//skip white space or mark new line
-		if (GetCurrentChar() == ' ' || GetCurrentChar() == '\n')
+		else if (GetCurrentChar() == ' ' || GetCurrentChar() == '\n')
 		{
 			//takes whatever word data exists and parse it
 			ParseWordData(wordData, &tokens);
