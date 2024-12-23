@@ -51,26 +51,11 @@ int main(int argc, char* argv[])
     fmt::print("\n\n---TOKENS---\n\n");
     for (size_t t = 0; t < tokens.size(); ++t)
         tokens[t].Print();
+    translationUnit.DeleteCode(); //cleans up raw code, as we don't need it to take up RAM anymore
 
-    //CodeFile code;
-    //if(!code.LoadFile(argv[1]))
-    //    return EXIT_FAILURE;
+    //generate AST Node
 
-    ////parse code into Tokens
-    //Lexer* lexer = init_lexer(&code);
-    //TranslationUnit translationUnit;
-    //do {
-    //    Token* t = translationUnit.AddToken(*get_next_token(lexer));
-    //    PrintToken(t);
-
-    //    //break or unrecognized
-    //    if (t->type == TokenType::TOKEN_EOF || t->type == TokenType::TOKEN_ERROR)
-    //        break;
-
-    //} while (translationUnit.GetLatestToken()->type != TokenType::TOKEN_EOF);
-
-    ////unloads code
-    //code.UnloadFile();
+    
 
     ////generate AST
     //Parser* parser = init_parser(&translationUnit);
