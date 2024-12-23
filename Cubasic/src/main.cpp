@@ -12,6 +12,8 @@ Cubasic compiler
 //#include <Cubasic/Frontend/AST.hpp>
 
 #include <Cubasic/Util/TranslationUnit.hpp>
+
+#include <Cubasic/Frontend/Token.hpp>
 //
 ////displays the AST
 //static inline void display_ast(ASTNode* node, int depth)
@@ -45,7 +47,7 @@ int main(int argc, char* argv[])
     translationUnit.LoadRawCode("C:/Compilers/Cubasic2/Cubasic-Toolchain/simple.cbs");
 
     //lexes the code
-    //std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens
+    std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens(translationUnit.rawCode);
 
     //CodeFile code;
     //if(!code.LoadFile(argv[1]))

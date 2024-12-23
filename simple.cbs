@@ -3,7 +3,7 @@ FUNCTION Main()
     DIM arr(10)
     FOR i IN 0 TO 9
         SET arr[i] = i * 2
-    NEXT i
+        NEXT i
     IF arr[5] > 10 THEN
         PRINT "Value is greater than 10"
     ELSE
