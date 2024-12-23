@@ -41,6 +41,17 @@ static inline char GetNextChar()
 	return current;
 }
 
+//generates a EOF token
+static inline Cubasic::Token::Token GenerateToken_EOF()
+{
+	Cubasic::Token::Token t;
+	t.type = Cubasic::Token::TokenType::EndOfFile;
+	t.sourceIndex = currentSourceIndex;
+	t.charIndex = charCount;
+	t.line = lineCount;
+	return t;
+}
+
 //generates a new line token
 static inline Cubasic::Token::Token GenerateToken_NewLine()
 {
@@ -87,10 +98,6 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 			//if new line, generate a new line tokne
 			if (GetCurrentChar() == '\n')
 				tokens.emplace_back(GenerateToken_NewLine());
-
-			//fmt::print(" ");
-			//GetNextChar();
-			//continue;
 		}
 
 		//stores the word data
@@ -101,6 +108,16 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 		fmt::print("{}", GetCurrentChar());
 		GetNextChar();
 	}
+
+	//adds the last of the word data
+	if (wordData != "")
+	{
+		tokens.emplace_back(GenerateToken_Identifier(wordData));
+		wordData = "";
+	}
+
+	//adds end of file token
+	tokens.emplace_back(GenerateToken_EOF());
 
 	return tokens;
 }

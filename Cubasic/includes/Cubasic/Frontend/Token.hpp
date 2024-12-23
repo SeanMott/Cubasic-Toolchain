@@ -72,6 +72,10 @@ namespace Cubasic::Token
 			case TokenType::Newline:
 				fmt::print(fmt::emphasis::bold | fg(fmt::color::orange), "Newline || Line: {}, Char: {}\n", line, charIndex);
 				return;
+
+			case TokenType::EndOfFile:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::red), "End Of File || Line: {}, Char: {}\n", line, charIndex);
+				return;
 			}
 		}
 	};
