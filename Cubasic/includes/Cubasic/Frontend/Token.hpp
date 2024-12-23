@@ -33,22 +33,16 @@ namespace Cubasic::Token
 	//defines a token type
 	enum class TokenType
 	{
-		Comment = 0,
+		Identifier = 0,
 
 		StringLiteral,
 		DigitLiteral,
 
-		Identifier,
-
 		Operator,
-		Punctuation,
 
 		Keyword,
 
-		Expression,
-
 		Newline,
-
 		EndOfFile,
 		Count
 	};
@@ -67,6 +61,10 @@ namespace Cubasic::Token
 			{
 			case TokenType::Identifier:
 				fmt::print(fmt::emphasis::bold | fg(fmt::color::blue), "Identifier || Line: {}, Char: {}, Data: {}\n", line, charIndex, data);
+				return;
+
+			case TokenType::StringLiteral:
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::blanched_almond), "String Literal || Line: {}, Char: {}, String: {}\n", line, charIndex, data);
 				return;
 
 			case TokenType::Newline:

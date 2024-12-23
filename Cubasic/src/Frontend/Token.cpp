@@ -63,6 +63,18 @@ static inline Cubasic::Token::Token GenerateToken_NewLine()
 	return t;
 }
 
+//generates a string literal token
+static inline Cubasic::Token::Token GenerateToken_StringLiteral(const std::string& str)
+{
+	Cubasic::Token::Token t;
+	t.type = Cubasic::Token::TokenType::StringLiteral;
+	t.sourceIndex = currentSourceIndex;
+	t.charIndex = charCount;
+	t.line = lineCount;
+	t.data = str;
+	return t;
+}
+
 //generates a identifier token
 static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& word)
 {
@@ -75,6 +87,17 @@ static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& 
 	return t;
 }
 
+//parses the word data
+static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Token::Token>* tokens)
+{
+	//takes whatever word data exists and parse it
+	if (wordData != "")
+	{
+		tokens->emplace_back(GenerateToken_Identifier(wordData));
+		wordData = "";
+	}
+}
+
 //lexes code into tokens
 std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::string& rawCode)
 {
@@ -85,15 +108,40 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 	std::string wordData = "";
 	while (currentSourceIndex < codeLength)
 	{
+		//if it's a string literal
+		if (GetCurrentChar() == '"')
+		{
+			//takes whatever word data exists and parse it
+			ParseWordData(wordData, &tokens);
+
+			//goes till the end of the string
+			char lastChar = '"',
+			currentChar = GetNextChar();
+			while (currentChar != '"')
+			{
+				//if the current char is a " and last is not a backslash, we end the string
+				if (lastChar != '\\' && currentChar == '"')
+					break;
+
+				//adds word data
+				wordData += currentChar;
+
+				//gets the next char
+				lastChar = currentChar;
+				currentChar = GetNextChar();
+			}
+
+			GetNextChar(); //skips the new char
+			tokens.emplace_back(GenerateToken_StringLiteral(wordData));
+			fmt::print("\"{}\"", wordData);
+			wordData = "";
+		}
+
 		//skip white space or mark new line
 		if (GetCurrentChar() == ' ' || GetCurrentChar() == '\n')
 		{
 			//takes whatever word data exists and parse it
-			if (wordData != "")
-			{
-				tokens.emplace_back(GenerateToken_Identifier(wordData));
-				wordData = "";
-			}
+			ParseWordData(wordData, &tokens);
 
 			//if new line, generate a new line tokne
 			if (GetCurrentChar() == '\n')
@@ -110,11 +158,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 	}
 
 	//adds the last of the word data
-	if (wordData != "")
-	{
-		tokens.emplace_back(GenerateToken_Identifier(wordData));
-		wordData = "";
-	}
+	ParseWordData(wordData, &tokens);
 
 	//adds end of file token
 	tokens.emplace_back(GenerateToken_EOF());
