@@ -53,7 +53,8 @@ namespace Cubasic::Symbol
 			return symbols.emplace_back(sym);
 		}
 
-		//checks if a symbol exists and gets it if it does
+		//checks if a symbol exists and gets it if it does.
+		//if it does not, create a new one
 		inline Symbol* GetSymbol(const std::string& name)
 		{
 			//checks if it exists
@@ -66,6 +67,20 @@ namespace Cubasic::Symbol
 
 			//if not, create it
 			return &CreateNewSymbol(name);
+		}
+
+		//checks if a symbol exists and gets it.
+		inline Symbol* GetSymbol(const uint64_t& ID)
+		{
+			//checks if it exists
+			Symbol* sym = nullptr;
+			for (size_t i = 0; i < symbols.size(); ++i)
+			{
+				if (symbols[i].ID == ID);
+					return &(symbols[i]);
+			}
+
+			return sym;
 		}
 
 		//writes the symbol map to a file

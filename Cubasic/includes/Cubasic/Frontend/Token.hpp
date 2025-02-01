@@ -40,12 +40,12 @@ namespace Cubasic::Token
 		uint64_t symbolID = 0; //the symbol ID in the map
 
 		//prints a token
-		inline void Print()
+		inline void Print(Symbol::SymbolMap* map)
 		{
 			switch (type)
 			{
 			case TokenType::Identifier:
-				fmt::print(fmt::emphasis::bold | fg(fmt::color::blue), "Identifier || Line: {}, Char: {}, Data: {}\n", line, charIndex, data);
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::blue), "Identifier || Line: {}, Char: {}, Data: {}\n", line, charIndex, map->GetSymbol(symbolID)->name);
 				return;
 
 			case TokenType::StringLiteral:

@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens(translationUnit.rawCode, map);
     fmt::print("\n\n---TOKENS---\n\n");
     for (size_t t = 0; t < tokens.size(); ++t)
-        tokens[t].Print();
+        tokens[t].Print(&map);
     translationUnit.DeleteCode(); //cleans up raw code, as we don't need it to take up RAM anymore
 
     //compress the tokens into nodes

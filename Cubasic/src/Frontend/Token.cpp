@@ -88,14 +88,14 @@ static inline Cubasic::Token::Token GenerateToken_DigitLiteral(const char num)
 }
 
 //generates a identifier token
-static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& word, const uint64_t& symbolID)
+static inline Cubasic::Token::Token GenerateToken_Identifier(const uint64_t& symbolID)
 {
 	Cubasic::Token::Token t;
 	t.type = Cubasic::Token::TokenType::Identifier;
 	t.sourceIndex = currentSourceIndex;
 	t.charIndex = charCount;
 	t.line = lineCount;
-	t.data = word;
+	t.data = "";
 	t.symbolID = symbolID;
 	return t;
 }
@@ -163,7 +163,7 @@ static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Tok
 			Cubasic::Symbol::Symbol* sym = map->GetSymbol(wordData);
 			if(!sym)
 				sym = sym = &map->CreateNewSymbol(wordData);
-			tokens->emplace_back(GenerateToken_Identifier(wordData, sym->ID));
+			tokens->emplace_back(GenerateToken_Identifier(sym->ID));
 		}
 		
 		
