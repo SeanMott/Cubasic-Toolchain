@@ -60,6 +60,7 @@ static inline Cubasic::Token::Token GenerateToken_NewLine()
 	t.sourceIndex = currentSourceIndex;
 	t.charIndex = charCount;
 	t.line = lineCount;
+	t.data = "";
 	return t;
 }
 
@@ -114,35 +115,16 @@ static inline Cubasic::Token::Token GenerateToken_Keyword(const Cubasic::Data::K
 }
 
 //generates a operator token
-static inline Cubasic::Token::Token GenerateToken_Operator(const char op)
+static inline Cubasic::Token::Token GenerateToken_Operator(const Cubasic::Data::OperatorTypes& type)
 {
 	Cubasic::Token::Token t;
 	t.type = Cubasic::Token::TokenType::Operator;
 	t.sourceIndex = currentSourceIndex;
 	t.charIndex = charCount;
 	t.line = lineCount;
-	t.data = op;
+	t.data = "";
+	t.operatorType = type;
 	return t;
-}
-
-//operator count
-static const uint8_t OPERATOR_STRS_COUNT = 8;
-
-//defines operators
-static const char* OPERATOR_STRS[OPERATOR_STRS_COUNT] = {
-	"[", "]", "(", ")", "<", ">", "=", "*"
-};
-
-//checks for a operator
-static inline bool IsCubasicOperator(const char str)
-{
-	for (size_t i = 0; i < OPERATOR_STRS_COUNT; ++i)
-	{
-		if (!strcmp(&str, OPERATOR_STRS[i]))
-			return true;
-	}
-
-	return false;
 }
 
 //parses the word data
@@ -180,7 +162,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 	Symbol::SymbolMap* map = &symbolMap;
 
 	//while there's still code to parse
-	std::string wordData = "";
+	std::string wordData = ""; Data::OperatorTypes op = Data::OperatorTypes::Count;
 	while (currentSourceIndex < codeLength)
 	{
 		//if it's a string literal
@@ -223,13 +205,14 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 		}
 
 		//if it's a operator
-		else if (IsCubasicOperator(GetCurrentChar()))
+		op = Data::IsCubasicOperator(GetCurrentChar());
+		if (op != Data::OperatorTypes::Count)
 		{
 			//takes whatever word data exists and parse it
 			ParseWordData(wordData, &tokens, map);
 
 			//generates a operator token
-			tokens.emplace_back(GenerateToken_Operator(GetCurrentChar()));
+			tokens.emplace_back(GenerateToken_Operator(op));
 		}
 
 		//skip white space or mark new line

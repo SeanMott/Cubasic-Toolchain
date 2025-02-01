@@ -4,6 +4,7 @@
 
 #include <Cubasic/Util/Logger.hpp>
 #include <Cubasic/Frontend/KeywordData.hpp>
+#include <Cubasic/Frontend/OperatorData.hpp>
 
 #include <Cubasic/Map/SymbolMap.hpp>
 
@@ -37,6 +38,7 @@ namespace Cubasic::Token
 
 		//defines specific bits of token data
 		Data::KeywordTypes keywordType = Data::KeywordTypes::Continue;
+		Data::OperatorTypes operatorType = Data::OperatorTypes::Count;
 		uint64_t symbolID = 0; //the symbol ID in the map
 
 		//prints a token
@@ -57,7 +59,7 @@ namespace Cubasic::Token
 				return;
 
 			case TokenType::Operator:
-				fmt::print(fmt::emphasis::bold | fg(fmt::color::coral), "Operator || Line: {}, Char: {}, Operator: {}\n", line, charIndex, data);
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::coral), "Operator || Line: {}, Char: {}, Operator: {}\n", line, charIndex, Data::ConvertOperatorTypeToStr(operatorType));
 				return;
 
 			case TokenType::Keyword:
