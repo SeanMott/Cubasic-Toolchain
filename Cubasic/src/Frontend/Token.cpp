@@ -77,7 +77,7 @@ static inline Cubasic::Token::Token GenerateToken_StringLiteral(const std::strin
 }
 
 //generates a digit literal token
-static inline Cubasic::Token::Token GenerateToken_DigitLiteral(const std::string& num)
+static inline Cubasic::Token::Token GenerateToken_DigitLiteral(const char num)
 {
 	Cubasic::Token::Token t;
 	t.type = Cubasic::Token::TokenType::DigitLiteral;
@@ -201,7 +201,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 			ParseWordData(wordData, &tokens, map);
 
 			//generates a digit token
-			tokens.emplace_back(GenerateToken_DigitLiteral(std::to_string(GetCurrentChar())));
+			tokens.emplace_back(GenerateToken_DigitLiteral(GetCurrentChar()));
 		}
 
 		//if it's a operator

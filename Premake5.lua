@@ -2,17 +2,8 @@ workspace "CubasicToolchain"
 architecture "x64"
 startproject "Cubasic"
 
-configurations
-{
-    "Debug",
-    "Release",
-    "Dist"
-}
-
---fmt vendor
-VENDER_INCLUDE_FMT = "Venders/FMT/include"
-
---defines a core libary that defines the Symbol Map format
+include "Common.lua"
+include "CubeCommon/CubeCommon.lua"
 
 --library that defines the Cubasic Language and parsing
 
@@ -41,12 +32,13 @@ includedirs
 {
     "Cubasic/includes",
 
+    CUBECOMMON_DIR_INCLUDE,
     VENDER_INCLUDE_FMT,
 }
 
-defines
+links
 {
-   
+    CUBECOMMON_LINK  
 }
 
 flags

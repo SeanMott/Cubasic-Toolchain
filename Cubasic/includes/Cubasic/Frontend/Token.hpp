@@ -2,7 +2,7 @@
 
 //defines a token and lexer of source code into tokens
 
-#include <Cubasic/Util/Logger.hpp>
+#include <CubeCommon/Logger.hpp>
 #include <Cubasic/Frontend/KeywordData.hpp>
 #include <Cubasic/Frontend/OperatorData.hpp>
 
