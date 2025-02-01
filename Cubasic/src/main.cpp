@@ -2,49 +2,29 @@
 Cubasic compiler
 */
 
-//#include <Cubasic/Lexer.hpp>
-//#include <Cubasic/Parser.hpp>
-//#include <Cubasic/SemanticAnalysis.hpp>
-//
-//#include <Cubasic/TranslationUnit.hpp>
-//
-//#include <Cubasic/Frontend/Token.hpp>
-//#include <Cubasic/Frontend/AST.hpp>
+#include <Cubasic/Arguments/ArgumentParser.hpp>
 
 #include <Cubasic/Util/TranslationUnit.hpp>
 
 #include <Cubasic/Frontend/Token.hpp>
-//
-////displays the AST
-//static inline void display_ast(ASTNode* node, int depth)
-//{
-//    for (int i = 0; i < depth; i++)
-//        printf("  ");
-//
-//    printf("Node Type: %d, Value: '%s'\n", node->type, node->value ? node->value : "NULL");
-//
-//    for (int i = 0; i < node->child_count; i++)
-//        display_ast(node->children[i], depth + 1);
-//}
 
 //entry point
 int main(int argc, char* argv[])
 {
-    //prints the arguments and how to use
-    //if (argc < 2)
-    //{
-    //    fprintf(stderr, "Usage: %s <source_file> [--tokens] [--ast] [--symbols]\n", argv[0]);
-    //    return EXIT_FAILURE;
-    //}
+    //if none
+    if (argc < 2)
+    {
+        Cubasic::Arguments::PrintHelpScreen();
+        getchar();
+        return 0;
+    }
 
-    //compiler flags
-    const bool printTokens = (argc > 2 && !strcmp(argv[2], "--tokens")),
-        printAST = (argc > 2 && !strcmp(argv[2], "--ast")),
-        printSymbolTable = !(argc > 2 && strcmp(argv[2], "--symbols"));
+    //parses the arguments
+    Cubasic::Arguments::CompilerSettings settings = Cubasic::Arguments::ParseArguments(argc, argv);
 
     //loads the code
     Cubasic::Util::TranslationUnit translationUnit;
-    translationUnit.LoadRawCode("C:/Compilers/Cubasic2/Cubasic-Toolchain/simple.cbs");
+    translationUnit.LoadRawCode(settings.inputCubasicFiles[0]);
 
     //lexes the code
     std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens(translationUnit.rawCode);
@@ -85,5 +65,5 @@ int main(int argc, char* argv[])
     //free_symbol_table();
 
     getchar();
-    return EXIT_SUCCESS;
+    return 0;
 }

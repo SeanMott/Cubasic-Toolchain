@@ -6,8 +6,10 @@ General Statements
 ------------------
 
 FUNCTION
-    Description: Define a function with arguments.
-    Syntax: FUNCTION funcName(arg1, arg2, ...)
+<br>
+Description: ```Define a function with arguments.```
+<br>
+Syntax: ``FUNCTION funcName(arg1, arg2, ...)``
 
 ; ASM	
 ; Function definition
