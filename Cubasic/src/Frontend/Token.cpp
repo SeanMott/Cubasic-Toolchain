@@ -100,10 +100,11 @@ static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& 
 }
 
 //generates a keyword token
-static inline Cubasic::Token::Token GenerateToken_Keyword(const std::string& word)
+static inline Cubasic::Token::Token GenerateToken_Keyword(const std::string& word, const Cubasic::Data::KeywordTypes& type)
 {
 	Cubasic::Token::Token t;
 	t.type = Cubasic::Token::TokenType::Keyword;
+	t.keywordType = type;
 	t.sourceIndex = currentSourceIndex;
 	t.charIndex = charCount;
 	t.line = lineCount;
@@ -121,28 +122,6 @@ static inline Cubasic::Token::Token GenerateToken_Operator(const char op)
 	t.line = lineCount;
 	t.data = op;
 	return t;
-}
-
-//keyword count
-static const uint8_t KEYWORD_STRS_COUNT = 28;
-
-//defines a keyword
-static const char* KEYWORD_STRS[KEYWORD_STRS_COUNT] = {
-	"FUNCTION", "PRINT", "DIM", "FOR", "IF", "ELSE", "ENDIF", "END", "CALL", "WHILE",
-	"BREAK", "CONTINUE", "GOTO", "RETURN", "HALT", "INPUT", "SET", "NEXT",
-	"SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW", "IN", "THEN", "TO", "arr"
-};
-
-//checks for keyword
-static inline bool IsCubasicKeyword(const char* str)
-{
-	for (size_t i = 0; i < KEYWORD_STRS_COUNT; ++i)
-	{
-		if (!strcmp(str, KEYWORD_STRS[i]))
-			return true;
-	}
-
-	return false;
 }
 
 //operator count
@@ -169,11 +148,13 @@ static inline bool IsCubasicOperator(const char str)
 static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Token::Token>* tokens)
 {
 	//takes whatever word data exists and parse it
+	Cubasic::Data::KeywordTypes keywordType;
 	if (wordData != "")
 	{
 		//if the word is a keyword
-		if(IsCubasicKeyword(wordData.c_str()))
-			tokens->emplace_back(GenerateToken_Keyword(wordData));
+		keywordType = Cubasic::Data::IsCubasicKeyword(wordData.c_str());
+		if(keywordType != Cubasic::Data::KeywordTypes::Count)
+			tokens->emplace_back(GenerateToken_Keyword(wordData, keywordType));
 
 		//otherwise make a identifier
 		else
