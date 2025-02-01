@@ -38,6 +38,8 @@ int main(int argc, char* argv[])
         tokens[t].Print();
     translationUnit.DeleteCode(); //cleans up raw code, as we don't need it to take up RAM anymore
 
+    //compress the tokens into nodes
+
     //writes the symbol map to file
     map.WriteToDisc(settings.outputSymbolMapFilePath);
 

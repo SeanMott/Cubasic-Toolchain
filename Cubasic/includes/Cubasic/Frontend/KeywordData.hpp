@@ -48,6 +48,15 @@ namespace Cubasic::Data
 		"SWAP", "CLEAR", "TRY", "CATCH", "PAUSE", "VIEW", "IN", "THEN", "TO"
 	};
 
+	//converts a keyword type into a string
+	static inline std::string ConvertKeywordTypeToStr(const KeywordTypes& type)
+	{
+		if (type == KeywordTypes::Count)
+			return "";
+
+		return KEYWORD_STRS[(int)type];
+	}
+
 	//checks for keyword and returns it's type
 	static inline KeywordTypes IsCubasicKeyword(const char* str)
 	{

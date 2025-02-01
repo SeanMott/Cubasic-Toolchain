@@ -14,6 +14,8 @@ namespace Cubasic::Symbol
 		Function = 0, //does the symbol point to a function name
 		Var, //does the symbol point to a variable
 
+		//does this symbol point to a string literal
+
 		Count
 	};
 

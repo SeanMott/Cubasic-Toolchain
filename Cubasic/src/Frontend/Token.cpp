@@ -101,7 +101,7 @@ static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& 
 }
 
 //generates a keyword token
-static inline Cubasic::Token::Token GenerateToken_Keyword(const std::string& word, const Cubasic::Data::KeywordTypes& type)
+static inline Cubasic::Token::Token GenerateToken_Keyword(const Cubasic::Data::KeywordTypes& type)
 {
 	Cubasic::Token::Token t;
 	t.type = Cubasic::Token::TokenType::Keyword;
@@ -109,7 +109,7 @@ static inline Cubasic::Token::Token GenerateToken_Keyword(const std::string& wor
 	t.sourceIndex = currentSourceIndex;
 	t.charIndex = charCount;
 	t.line = lineCount;
-	t.data = word;
+	t.data = "";
 	return t;
 }
 
@@ -155,7 +155,7 @@ static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Tok
 		//if the word is a keyword
 		keywordType = Cubasic::Data::IsCubasicKeyword(wordData.c_str());
 		if (keywordType != Cubasic::Data::KeywordTypes::Count)
-			tokens->emplace_back(GenerateToken_Keyword(wordData, keywordType));
+			tokens->emplace_back(GenerateToken_Keyword(keywordType));
 
 		//otherwise make a identifier
 		else

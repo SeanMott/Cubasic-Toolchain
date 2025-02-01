@@ -61,7 +61,7 @@ namespace Cubasic::Token
 				return;
 
 			case TokenType::Keyword:
-				fmt::print(fmt::emphasis::bold | fg(fmt::color::dark_green), "Keyword || Line: {}, Char: {}, Keyword: {}\n", line, charIndex, data);
+				fmt::print(fmt::emphasis::bold | fg(fmt::color::dark_green), "Keyword || Line: {}, Char: {}, Keyword: {}\n", line, charIndex, Data::ConvertKeywordTypeToStr(keywordType));
 				return;
 
 			case TokenType::Newline:
