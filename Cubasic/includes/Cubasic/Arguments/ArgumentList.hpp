@@ -24,6 +24,9 @@ namespace Cubasic::Arguments
 
 	//should we output a symbol map (default on)
 
+	//outputs a symbol map
+#define CUBASIC_ARG_STRING_NAME_MAP_OUTPUT_FILE_NAME "-map"
+
 	//---parsing
 
 	//if no arguments are given print the help screen

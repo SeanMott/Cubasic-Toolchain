@@ -12,6 +12,8 @@ configurations
 --fmt vendor
 VENDER_INCLUDE_FMT = "Venders/FMT/include"
 
+--defines a core libary that defines the Symbol Map format
+
 --library that defines the Cubasic Language and parsing
 
 --library that defines the Cubix Core ASM for parsing

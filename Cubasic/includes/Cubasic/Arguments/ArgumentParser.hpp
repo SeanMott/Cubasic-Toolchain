@@ -19,6 +19,12 @@ namespace Cubasic::Arguments
 				i++;
 				settings.inputCubasicFiles.emplace_back(argv[i]);
 			}
+
+			else if (!strcmp(CUBASIC_ARG_STRING_NAME_MAP_OUTPUT_FILE_NAME, argv[i]))
+			{
+				i++;
+				settings.outputSymbolMapFilePath = argv[i];
+			}
 		}
 
 		return settings;

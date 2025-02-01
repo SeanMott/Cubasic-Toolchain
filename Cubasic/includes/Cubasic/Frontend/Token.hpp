@@ -5,6 +5,8 @@
 #include <Cubasic/Util/Logger.hpp>
 #include <Cubasic/Frontend/KeywordData.hpp>
 
+#include <Cubasic/Map/SymbolMap.hpp>
+
 #include <vector>
 
 namespace Cubasic::Token
@@ -35,6 +37,7 @@ namespace Cubasic::Token
 
 		//defines specific bits of token data
 		Data::KeywordTypes keywordType = Data::KeywordTypes::Continue;
+		uint64_t symbolID = 0; //the symbol ID in the map
 
 		//prints a token
 		inline void Print()
@@ -73,5 +76,5 @@ namespace Cubasic::Token
 	};
 
 	//lexes source code into tokens
-	std::vector<Token> LexCodeIntoTokens(const std::string& rawCode);
+	std::vector<Token> LexCodeIntoTokens(const std::string& rawCode, Symbol::SymbolMap& symbolMap);
 }

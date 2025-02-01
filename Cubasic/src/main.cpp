@@ -8,6 +8,8 @@ Cubasic compiler
 
 #include <Cubasic/Frontend/Token.hpp>
 
+
+
 //entry point
 int main(int argc, char* argv[])
 {
@@ -22,16 +24,22 @@ int main(int argc, char* argv[])
     //parses the arguments
     Cubasic::Arguments::CompilerSettings settings = Cubasic::Arguments::ParseArguments(argc, argv);
 
+    //initalizes a symbol map
+    Cubasic::Symbol::SymbolMap map;
+
     //loads the code
     Cubasic::Util::TranslationUnit translationUnit;
     translationUnit.LoadRawCode(settings.inputCubasicFiles[0]);
 
     //lexes the code
-    std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens(translationUnit.rawCode);
+    std::vector<Cubasic::Token::Token> tokens = Cubasic::Token::LexCodeIntoTokens(translationUnit.rawCode, map);
     fmt::print("\n\n---TOKENS---\n\n");
     for (size_t t = 0; t < tokens.size(); ++t)
         tokens[t].Print();
     translationUnit.DeleteCode(); //cleans up raw code, as we don't need it to take up RAM anymore
+
+    //writes the symbol map to file
+    map.WriteToDisc(settings.outputSymbolMapFilePath);
 
     //generate AST Node
 
@@ -64,6 +72,6 @@ int main(int argc, char* argv[])
     ////clean up Symbol Table
     //free_symbol_table();
 
-    getchar();
+    ///getchar();
     return 0;
 }

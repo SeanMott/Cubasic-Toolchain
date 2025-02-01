@@ -88,7 +88,7 @@ static inline Cubasic::Token::Token GenerateToken_DigitLiteral(const char num)
 }
 
 //generates a identifier token
-static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& word)
+static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& word, const uint64_t& symbolID)
 {
 	Cubasic::Token::Token t;
 	t.type = Cubasic::Token::TokenType::Identifier;
@@ -96,6 +96,7 @@ static inline Cubasic::Token::Token GenerateToken_Identifier(const std::string& 
 	t.charIndex = charCount;
 	t.line = lineCount;
 	t.data = word;
+	t.symbolID = symbolID;
 	return t;
 }
 
@@ -145,7 +146,7 @@ static inline bool IsCubasicOperator(const char str)
 }
 
 //parses the word data
-static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Token::Token>* tokens)
+static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Token::Token>* tokens, Cubasic::Symbol::SymbolMap* map)
 {
 	//takes whatever word data exists and parse it
 	Cubasic::Data::KeywordTypes keywordType;
@@ -153,12 +154,17 @@ static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Tok
 	{
 		//if the word is a keyword
 		keywordType = Cubasic::Data::IsCubasicKeyword(wordData.c_str());
-		if(keywordType != Cubasic::Data::KeywordTypes::Count)
+		if (keywordType != Cubasic::Data::KeywordTypes::Count)
 			tokens->emplace_back(GenerateToken_Keyword(wordData, keywordType));
 
 		//otherwise make a identifier
 		else
-			tokens->emplace_back(GenerateToken_Identifier(wordData));
+		{
+			Cubasic::Symbol::Symbol* sym = map->GetSymbol(wordData);
+			if(!sym)
+				sym = sym = &map->CreateNewSymbol(wordData);
+			tokens->emplace_back(GenerateToken_Identifier(wordData, sym->ID));
+		}
 		
 		
 		wordData = "";
@@ -166,10 +172,12 @@ static inline void ParseWordData(std::string& wordData, std::vector<Cubasic::Tok
 }
 
 //lexes code into tokens
-std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::string& rawCode)
+std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::string& rawCode, Symbol::SymbolMap& symbolMap)
 {
 	SetCodeToLex(rawCode);
 	std::vector<Token> tokens; tokens.reserve(codeLength);
+	symbolMap.symbols.reserve(20);
+	Symbol::SymbolMap* map = &symbolMap;
 
 	//while there's still code to parse
 	std::string wordData = "";
@@ -179,7 +187,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 		if (GetCurrentChar() == '"')
 		{
 			//takes whatever word data exists and parse it
-			ParseWordData(wordData, &tokens);
+			ParseWordData(wordData, &tokens, map);
 
 			//goes till the end of the string
 			char lastChar = '"',
@@ -208,7 +216,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 		else if (isdigit(GetCurrentChar()))
 		{
 			//takes whatever word data exists and parse it
-			ParseWordData(wordData, &tokens);
+			ParseWordData(wordData, &tokens, map);
 
 			//generates a digit token
 			tokens.emplace_back(GenerateToken_DigitLiteral(GetCurrentChar()));
@@ -218,7 +226,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 		else if (IsCubasicOperator(GetCurrentChar()))
 		{
 			//takes whatever word data exists and parse it
-			ParseWordData(wordData, &tokens);
+			ParseWordData(wordData, &tokens, map);
 
 			//generates a operator token
 			tokens.emplace_back(GenerateToken_Operator(GetCurrentChar()));
@@ -228,7 +236,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 		else if (GetCurrentChar() == ' ' || GetCurrentChar() == '\n')
 		{
 			//takes whatever word data exists and parse it
-			ParseWordData(wordData, &tokens);
+			ParseWordData(wordData, &tokens, map);
 
 			//if new line, generate a new line tokne
 			if (GetCurrentChar() == '\n')
@@ -245,7 +253,7 @@ std::vector<Cubasic::Token::Token> Cubasic::Token::LexCodeIntoTokens(const std::
 	}
 
 	//adds the last of the word data
-	ParseWordData(wordData, &tokens);
+	ParseWordData(wordData, &tokens, map);
 
 	//adds end of file token
 	tokens.emplace_back(GenerateToken_EOF());
